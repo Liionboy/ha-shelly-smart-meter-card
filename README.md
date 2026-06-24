@@ -1,6 +1,7 @@
 <p align="center">
   <img src="brand/logo.svg" alt="Shelly Smart Meter Card" width="400">
 </p>
+<img width="698" height="941" alt="image" src="https://github.com/user-attachments/assets/0817b2b2-b786-4870-9fd2-a80138db4d98" />
 
 <h1 align="center">⚡ Shelly Smart Meter Card</h1>
 
