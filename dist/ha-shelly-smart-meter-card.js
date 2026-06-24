@@ -1,234 +1,131 @@
-function t(t,e,s,i){var o,a=arguments.length,r=a<3?e:null===i?i=Object.getOwnPropertyDescriptor(e,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,i);else for(var n=t.length-1;n>=0;n--)(o=t[n])&&(r=(a<3?o(r):a>3?o(e,s,r):o(e,s))||r);return a>3&&r&&Object.defineProperty(e,s,r),r}"function"==typeof SuppressedError&&SuppressedError;const e=globalThis,s=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,i=Symbol(),o=new WeakMap;let a=class{constructor(t,e,s){if(this._$cssResult$=!0,s!==i)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(s&&void 0===t){const s=void 0!==e&&1===e.length;s&&(t=o.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),s&&o.set(e,t))}return t}toString(){return this.cssText}};const r=(t,...e)=>{const s=1===t.length?t[0]:e.reduce((e,s,i)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[i+1],t[0]);return new a(s,t,i)},n=s?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return(t=>new a("string"==typeof t?t:t+"",void 0,i))(e)})(t):t,{is:c,defineProperty:l,getOwnPropertyDescriptor:h,getOwnPropertyNames:d,getOwnPropertySymbols:p,getPrototypeOf:_}=Object,u=globalThis,g=u.trustedTypes,f=g?g.emptyScript:"",v=u.reactiveElementPolyfillSupport,m=(t,e)=>t,$={toAttribute(t,e){switch(e){case Boolean:t=t?f:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let s=t;switch(e){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t)}catch(t){s=null}}return s}},b=(t,e)=>!c(t,e),x={attribute:!0,type:String,converter:$,reflect:!1,useDefault:!1,hasChanged:b};Symbol.metadata??=Symbol("metadata"),u.litPropertyMetadata??=new WeakMap;let y=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=x){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const s=Symbol(),i=this.getPropertyDescriptor(t,s,e);void 0!==i&&l(this.prototype,t,i)}}static getPropertyDescriptor(t,e,s){const{get:i,set:o}=h(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:i,set(e){const a=i?.call(this);o?.call(this,e),this.requestUpdate(t,a,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??x}static _$Ei(){if(this.hasOwnProperty(m("elementProperties")))return;const t=_(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(m("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(m("properties"))){const t=this.properties,e=[...d(t),...p(t)];for(const s of e)this.createProperty(s,t[s])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,s]of e)this.elementProperties.set(t,s)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const s=this._$Eu(t,e);void 0!==s&&this._$Eh.set(s,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const s=new Set(t.flat(1/0).reverse());for(const t of s)e.unshift(n(t))}else void 0!==t&&e.push(n(t));return e}static _$Eu(t,e){const s=e.attribute;return!1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const s of e.keys())this.hasOwnProperty(s)&&(t.set(s,this[s]),delete this[s]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,i)=>{if(s)t.adoptedStyleSheets=i.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const s of i){const i=document.createElement("style"),o=e.litNonce;void 0!==o&&i.setAttribute("nonce",o),i.textContent=s.cssText,t.appendChild(i)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,s){this._$AK(t,s)}_$ET(t,e){const s=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,s);if(void 0!==i&&!0===s.reflect){const o=(void 0!==s.converter?.toAttribute?s.converter:$).toAttribute(e,s.type);this._$Em=t,null==o?this.removeAttribute(i):this.setAttribute(i,o),this._$Em=null}}_$AK(t,e){const s=this.constructor,i=s._$Eh.get(t);if(void 0!==i&&this._$Em!==i){const t=s.getPropertyOptions(i),o="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:$;this._$Em=i;const a=o.fromAttribute(e,t.type);this[i]=a??this._$Ej?.get(i)??a,this._$Em=null}}requestUpdate(t,e,s,i=!1,o){if(void 0!==t){const a=this.constructor;if(!1===i&&(o=this[t]),s??=a.getPropertyOptions(t),!((s.hasChanged??b)(o,e)||s.useDefault&&s.reflect&&o===this._$Ej?.get(t)&&!this.hasAttribute(a._$Eu(t,s))))return;this.C(t,e,s)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:s,reflect:i,wrapped:o},a){s&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,a??e??this[t]),!0!==o||void 0!==a)||(this._$AL.has(t)||(this.hasUpdated||s||(e=void 0),this._$AL.set(t,e)),!0===i&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,s]of t){const{wrapped:t}=s,i=this[e];!0!==t||this._$AL.has(e)||void 0===i||this.C(e,void 0,s,i)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};y.elementStyles=[],y.shadowRootOptions={mode:"open"},y[m("elementProperties")]=new Map,y[m("finalized")]=new Map,v?.({ReactiveElement:y}),(u.reactiveElementVersions??=[]).push("2.1.2");const w=globalThis,A=t=>t,k=w.trustedTypes,E=k?k.createPolicy("lit-html",{createHTML:t=>t}):void 0,S="$lit$",C=`lit$${Math.random().toFixed(9).slice(2)}$`,z="?"+C,P=`<${z}>`,O=document,M=()=>O.createComment(""),T=t=>null===t||"object"!=typeof t&&"function"!=typeof t,U=Array.isArray,R="[ \t\n\f\r]",N=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,D=/-->/g,H=/>/g,F=RegExp(`>|${R}(?:([^\\s"'>=/]+)(${R}*=${R}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),j=/'/g,W=/"/g,L=/^(?:script|style|textarea|title)$/i,q=(t=>(e,...s)=>({_$litType$:t,strings:e,values:s}))(1),I=Symbol.for("lit-noChange"),B=Symbol.for("lit-nothing"),V=new WeakMap,G=O.createTreeWalker(O,129);function J(t,e){if(!U(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==E?E.createHTML(e):e}const Y=(t,e)=>{const s=t.length-1,i=[];let o,a=2===e?"<svg>":3===e?"<math>":"",r=N;for(let e=0;e<s;e++){const s=t[e];let n,c,l=-1,h=0;for(;h<s.length&&(r.lastIndex=h,c=r.exec(s),null!==c);)h=r.lastIndex,r===N?"!--"===c[1]?r=D:void 0!==c[1]?r=H:void 0!==c[2]?(L.test(c[2])&&(o=RegExp("</"+c[2],"g")),r=F):void 0!==c[3]&&(r=F):r===F?">"===c[0]?(r=o??N,l=-1):void 0===c[1]?l=-2:(l=r.lastIndex-c[2].length,n=c[1],r=void 0===c[3]?F:'"'===c[3]?W:j):r===W||r===j?r=F:r===D||r===H?r=N:(r=F,o=void 0);const d=r===F&&t[e+1].startsWith("/>")?" ":"";a+=r===N?s+P:l>=0?(i.push(n),s.slice(0,l)+S+s.slice(l)+C+d):s+C+(-2===l?e:d)}return[J(t,a+(t[s]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),i]};class K{constructor({strings:t,_$litType$:e},s){let i;this.parts=[];let o=0,a=0;const r=t.length-1,n=this.parts,[c,l]=Y(t,e);if(this.el=K.createElement(c,s),G.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(i=G.nextNode())&&n.length<r;){if(1===i.nodeType){if(i.hasAttributes())for(const t of i.getAttributeNames())if(t.endsWith(S)){const e=l[a++],s=i.getAttribute(t).split(C),r=/([.?@])?(.*)/.exec(e);n.push({type:1,index:o,name:r[2],strings:s,ctor:"."===r[1]?et:"?"===r[1]?st:"@"===r[1]?it:tt}),i.removeAttribute(t)}else t.startsWith(C)&&(n.push({type:6,index:o}),i.removeAttribute(t));if(L.test(i.tagName)){const t=i.textContent.split(C),e=t.length-1;if(e>0){i.textContent=k?k.emptyScript:"";for(let s=0;s<e;s++)i.append(t[s],M()),G.nextNode(),n.push({type:2,index:++o});i.append(t[e],M())}}}else if(8===i.nodeType)if(i.data===z)n.push({type:2,index:o});else{let t=-1;for(;-1!==(t=i.data.indexOf(C,t+1));)n.push({type:7,index:o}),t+=C.length-1}o++}}static createElement(t,e){const s=O.createElement("template");return s.innerHTML=t,s}}function Z(t,e,s=t,i){if(e===I)return e;let o=void 0!==i?s._$Co?.[i]:s._$Cl;const a=T(e)?void 0:e._$litDirective$;return o?.constructor!==a&&(o?._$AO?.(!1),void 0===a?o=void 0:(o=new a(t),o._$AT(t,s,i)),void 0!==i?(s._$Co??=[])[i]=o:s._$Cl=o),void 0!==o&&(e=Z(t,o._$AS(t,e.values),o,i)),e}class Q{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:s}=this._$AD,i=(t?.creationScope??O).importNode(e,!0);G.currentNode=i;let o=G.nextNode(),a=0,r=0,n=s[0];for(;void 0!==n;){if(a===n.index){let e;2===n.type?e=new X(o,o.nextSibling,this,t):1===n.type?e=new n.ctor(o,n.name,n.strings,this,t):6===n.type&&(e=new ot(o,this,t)),this._$AV.push(e),n=s[++r]}a!==n?.index&&(o=G.nextNode(),a++)}return G.currentNode=O,i}p(t){let e=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,e),e+=s.strings.length-2):s._$AI(t[e])),e++}}class X{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,s,i){this.type=2,this._$AH=B,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Z(this,t,e),T(t)?t===B||null==t||""===t?(this._$AH!==B&&this._$AR(),this._$AH=B):t!==this._$AH&&t!==I&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>U(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==B&&T(this._$AH)?this._$AA.nextSibling.data=t:this.T(O.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:s}=t,i="number"==typeof s?this._$AC(t):(void 0===s.el&&(s.el=K.createElement(J(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(e);else{const t=new Q(i,this),s=t.u(this.options);t.p(e),this.T(s),this._$AH=t}}_$AC(t){let e=V.get(t.strings);return void 0===e&&V.set(t.strings,e=new K(t)),e}k(t){U(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let s,i=0;for(const o of t)i===e.length?e.push(s=new X(this.O(M()),this.O(M()),this,this.options)):s=e[i],s._$AI(o),i++;i<e.length&&(this._$AR(s&&s._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=A(t).nextSibling;A(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class tt{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,s,i,o){this.type=1,this._$AH=B,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=o,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=B}_$AI(t,e=this,s,i){const o=this.strings;let a=!1;if(void 0===o)t=Z(this,t,e,0),a=!T(t)||t!==this._$AH&&t!==I,a&&(this._$AH=t);else{const i=t;let r,n;for(t=o[0],r=0;r<o.length-1;r++)n=Z(this,i[s+r],e,r),n===I&&(n=this._$AH[r]),a||=!T(n)||n!==this._$AH[r],n===B?t=B:t!==B&&(t+=(n??"")+o[r+1]),this._$AH[r]=n}a&&!i&&this.j(t)}j(t){t===B?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class et extends tt{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===B?void 0:t}}class st extends tt{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==B)}}class it extends tt{constructor(t,e,s,i,o){super(t,e,s,i,o),this.type=5}_$AI(t,e=this){if((t=Z(this,t,e,0)??B)===I)return;const s=this._$AH,i=t===B&&s!==B||t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive,o=t!==B&&(s===B||i);i&&this.element.removeEventListener(this.name,this,s),o&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class ot{constructor(t,e,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){Z(this,t)}}const at=w.litHtmlPolyfillSupport;at?.(K,X),(w.litHtmlVersions??=[]).push("3.3.3");const rt=globalThis;class nt extends y{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,s)=>{const i=s?.renderBefore??e;let o=i._$litPart$;if(void 0===o){const t=s?.renderBefore??null;i._$litPart$=o=new X(e.insertBefore(M(),t),t,void 0,s??{})}return o._$AI(t),o})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return I}}nt._$litElement$=!0,nt.finalized=!0,rt.litElementHydrateSupport?.({LitElement:nt});const ct=rt.litElementPolyfillSupport;ct?.({LitElement:nt}),(rt.litElementVersions??=[]).push("4.2.2");const lt=t=>(e,s)=>{void 0!==s?s.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)},ht={attribute:!0,type:String,converter:$,reflect:!1,hasChanged:b},dt=(t=ht,e,s)=>{const{kind:i,metadata:o}=s;let a=globalThis.litPropertyMetadata.get(o);if(void 0===a&&globalThis.litPropertyMetadata.set(o,a=new Map),"setter"===i&&((t=Object.create(t)).wrapped=!0),a.set(s.name,t),"accessor"===i){const{name:i}=s;return{set(s){const o=e.get.call(this);e.set.call(this,s),this.requestUpdate(i,o,t,!0,s)},init(e){return void 0!==e&&this.C(i,void 0,t,e),e}}}if("setter"===i){const{name:i}=s;return function(s){const o=this[i];e.call(this,s),this.requestUpdate(i,o,t,!0,s)}}throw Error("Unsupported decorator location: "+i)};function pt(t){return(e,s)=>"object"==typeof s?dt(t,e,s):((t,e,s)=>{const i=e.hasOwnProperty(s);return e.constructor.createProperty(s,t),i?Object.getOwnPropertyDescriptor(e,s):void 0})(t,e,s)}function _t(t){return pt({...t,state:!0,attribute:!1})}var ut,gt;!function(t){t.language="language",t.system="system",t.comma_decimal="comma_decimal",t.decimal_comma="decimal_comma",t.space_comma="space_comma",t.none="none"}(ut||(ut={})),function(t){t.language="language",t.system="system",t.am_pm="12",t.twenty_four="24"}(gt||(gt={}));const ft=(t,e,s,i)=>{i=i||{},s=null==s?{}:s;const o=new Event(e,{bubbles:void 0===i.bubbles||i.bubbles,cancelable:Boolean(i.cancelable),composed:void 0===i.composed||i.composed});return o.detail=s,t.dispatchEvent(o),o},vt="ha-shelly-smart-meter-card";console.info("%c ⚡ SHELLY-SMART-METER-CARD %c v2.0.0 ","color:#fff;background:#f59e0b;font-weight:700;border-radius:4px 0 0 4px;padding:2px 6px;","color:#fff;background:#6b7280;font-weight:700;border-radius:0 4px 4px 0;padding:2px 6px;");const mt={phase_a_power:"_phase_a_active_power",phase_a_apparent:"_phase_a_apparent_power",phase_a_voltage:"_phase_a_voltage",phase_a_current:"_phase_a_current",phase_a_pf:"_phase_a_power_factor",phase_a_freq:"_phase_a_frequency",phase_a_energy:"_phase_a_total_active_energy",phase_a_returned:"_phase_a_total_active_returned_energy",phase_b_power:"_phase_b_active_power",phase_b_apparent:"_phase_b_apparent_power",phase_b_voltage:"_phase_b_voltage",phase_b_current:"_phase_b_current",phase_b_pf:"_phase_b_power_factor",phase_b_freq:"_phase_b_frequency",phase_b_energy:"_phase_b_total_active_energy",phase_b_returned:"_phase_b_total_active_returned_energy",phase_c_power:"_phase_c_active_power",phase_c_apparent:"_phase_c_apparent_power",phase_c_voltage:"_phase_c_voltage",phase_c_current:"_phase_c_current",phase_c_pf:"_phase_c_power_factor",phase_c_freq:"_phase_c_frequency",phase_c_energy:"_phase_c_total_active_energy",phase_c_returned:"_phase_c_total_active_returned_energy",total_power:"_total_active_power",total_apparent:"_total_apparent_power",total_current:"_total_current",total_energy:"_total_active_energy",total_returned:"_total_active_returned_energy",total_cost:"_total_active_energy_cost",temperature:"_temperature",rssi:"_rssi",uptime:"_uptime"},$t={cloud:"_cloud",restart_required:"_restart_required"},bt={firmware:"_firmware_update",beta_firmware:"_beta_firmware_update"},xt={ble_integration:"_aioshelly_ble_integration",monitor_production:"_monitor_production_js"},yt={reboot:"_reboot"},wt={A:"Faza A",B:"Faza B",C:"Faza C"};let At=null;function kt(t){if(At)return At;const e=Object.keys(t.states).find(t=>t.startsWith("sensor.")&&t.endsWith("_phase_a_active_power"));if(!e)return{};const s=e.replace("sensor.","").replace("_phase_a_active_power",""),i={};for(const[e,o]of Object.entries(mt)){const a=`sensor.${s}${o}`;t.states[a]&&(i[e]=a)}for(const[e,o]of Object.entries($t)){const a=`binary_sensor.${s}${o}`;t.states[a]&&(i[e]=a)}for(const[e,o]of Object.entries(bt)){const a=`update.${s}${o}`;t.states[a]&&(i[e]=a)}for(const[e,o]of Object.entries(xt)){const a=`switch.${s}${o}`;t.states[a]&&(i[e]=a)}for(const[e,o]of Object.entries(yt)){const a=`button.${s}${o}`;t.states[a]&&(i[e]=a)}const o=`device_tracker.${s}`;return t.states[o]&&(i.device_tracker=o),At=i,i}let Et=class extends nt{constructor(){super(...arguments),this._showPhaseDetails=!1,this._showTotals=!1}static async getConfigElement(){return await Promise.resolve().then(function(){return Ct}),document.createElement("ha-shelly-smart-meter-editor")}static getStubConfig(){return{type:vt,title:"⚡ Smart Meter",show_header:!0,show_flow:!0,show_phases:!0,show_totals:!0,show_energy:!0,show_costs:!0,show_device:!0,show_controls:!1,cost_per_kwh:.85,entities:{},phase_labels:wt}}setConfig(t){if(!t)throw new Error("Invalid config");At=null,this.config={...t,type:vt,title:t.title||"⚡ Smart Meter",show_header:t.show_header??!0,show_flow:t.show_flow??!0,show_phases:t.show_phases??!0,show_totals:t.show_totals??!0,show_energy:t.show_energy??!0,show_costs:t.show_costs??!0,show_device:t.show_device??!0,show_controls:t.show_controls??!1,cost_per_kwh:t.cost_per_kwh??.85,entities:t.entities||{},phase_labels:{...wt,...t.phase_labels}}}_resolve(t){return this.config.entities?.[t]||this.hass&&kt(this.hass)[t]||""}_s(t){const e=this._resolve(t);return e?this.hass?.states[e]?.state:void 0}_n(t){const e=parseFloat(this._s(t)||"");return isNaN(e)?0:e}_e(t){return this._resolve(t)}_attr(t,e){const s=this._resolve(t);return s?this.hass?.states[s]?.attributes?.[e]:void 0}_changed(t){const e=this._resolve(t);if(!e)return"";const s=this.hass?.states[e];if(!s?.last_changed)return"";const i=Math.floor((Date.now()-new Date(s.last_changed).getTime())/6e4);if(i<1)return"acum";if(i<60)return`${i} min`;const o=Math.floor(i/60);return o<24?`${o}h ${i%60}min`:`${Math.floor(o/24)}z ${o%24}h`}_more(t){t&&ft(this,"hass-more-info",{entityId:t})}_fmt(t,e=1){return Math.abs(t)>=1e3?(t/1e3).toFixed(e)+"k":t.toFixed(e)}_fmtDate(t){try{const e=new Date(t),s=Date.now()-e.getTime(),i=Math.floor(s/864e5),o=Math.floor(s%864e5/36e5);if(i>0)return`${i}z ${o}h`;return`${o}h ${Math.floor(s%36e5/6e4)}min`}catch{return t}}getCardSize(){return 8}render(){if(!this.config||!this.hass)return B;const t=kt(this.hass);if(!(Object.keys(t).length>0||Object.keys(this.config.entities||{}).length>0))return q`
-        <ha-card>
-          <div class="header importing"><div class="header-icon">⚡</div>
-            <div class="header-text"><div class="header-title">Shelly Smart Meter</div>
-              <div class="header-sub">Nu s-au găsit entități Shelly Pro 3EM</div>
-            </div></div>
-          <div class="content"><div class="no-device">
-            <ha-icon icon="mdi:alert-circle-outline"></ha-icon>
-            <p>Nu am detectat automat un Shelly Pro 3EM.</p>
-            <p>Adaugă entitățile manual în config sau verifică integrarea.</p>
-          </div></div>
-        </ha-card>`;const e=this._n("total_power"),s=e<0,i=Math.abs(Math.round(e)),o=["a","b","c"].map(t=>({key:t.toUpperCase(),label:this.config.phase_labels?.[t.toUpperCase()]||`Faza ${t.toUpperCase()}`,power:this._n(`phase_${t}_power`),apparent:this._n(`phase_${t}_apparent`),voltage:this._n(`phase_${t}_voltage`),current:this._n(`phase_${t}_current`),pf:this._n(`phase_${t}_pf`),freq:this._n(`phase_${t}_freq`),energy:this._n(`phase_${t}_energy`),returned:this._n(`phase_${t}_returned`)})),a=this._n("daily_consumed"),r=this._n("daily_grid"),n=this._n("daily_return"),c=this._n("daily_hp"),l=this._n("total_energy"),h=this._n("total_returned"),d=this._n("total_cost"),p=this.config.cost_per_kwh||.85,_=r*p,u=this._s("temperature"),g=this._n("rssi"),f=this._s("uptime"),v="on"===this._s("cloud"),m="on"===this._s("restart_required"),$="on"===this._s("ble_integration"),b="on"===this._s("monitor_production"),x="on"===this._s("firmware"),y="on"===this._s("beta_firmware"),w="home"===this._s("device_tracker"),A=this._n("total_apparent"),k=A>0?Math.abs(e)/A:0;return q`
+function e(e,t,o,s){var i,a=arguments.length,r=a<3?t:null===s?s=Object.getOwnPropertyDescriptor(t,o):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(e,t,o,s);else for(var n=e.length-1;n>=0;n--)(i=e[n])&&(r=(a<3?i(r):a>3?i(t,o,r):i(t,o))||r);return a>3&&r&&Object.defineProperty(t,o,r),r}"function"==typeof SuppressedError&&SuppressedError;const t=globalThis,o=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s=Symbol(),i=new WeakMap;let a=class{constructor(e,t,o){if(this._$cssResult$=!0,o!==s)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=e,this.t=t}get styleSheet(){let e=this.o;const t=this.t;if(o&&void 0===e){const o=void 0!==t&&1===t.length;o&&(e=i.get(t)),void 0===e&&((this.o=e=new CSSStyleSheet).replaceSync(this.cssText),o&&i.set(t,e))}return e}toString(){return this.cssText}};const r=(e,...t)=>{const o=1===e.length?e[0]:t.reduce((t,o,s)=>t+(e=>{if(!0===e._$cssResult$)return e.cssText;if("number"==typeof e)return e;throw Error("Value passed to 'css' function must be a 'css' function result: "+e+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(o)+e[s+1],e[0]);return new a(o,e,s)},n=o?e=>e:e=>e instanceof CSSStyleSheet?(e=>{let t="";for(const o of e.cssRules)t+=o.cssText;return(e=>new a("string"==typeof e?e:e+"",void 0,s))(t)})(e):e,{is:c,defineProperty:l,getOwnPropertyDescriptor:p,getOwnPropertyNames:d,getOwnPropertySymbols:h,getPrototypeOf:_}=Object,u=globalThis,g=u.trustedTypes,f=g?g.emptyScript:"",v=u.reactiveElementPolyfillSupport,m=(e,t)=>e,$={toAttribute(e,t){switch(t){case Boolean:e=e?f:null;break;case Object:case Array:e=null==e?e:JSON.stringify(e)}return e},fromAttribute(e,t){let o=e;switch(t){case Boolean:o=null!==e;break;case Number:o=null===e?null:Number(e);break;case Object:case Array:try{o=JSON.parse(e)}catch(e){o=null}}return o}},y=(e,t)=>!c(e,t),b={attribute:!0,type:String,converter:$,reflect:!1,useDefault:!1,hasChanged:y};Symbol.metadata??=Symbol("metadata"),u.litPropertyMetadata??=new WeakMap;let w=class extends HTMLElement{static addInitializer(e){this._$Ei(),(this.l??=[]).push(e)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(e,t=b){if(t.state&&(t.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(e)&&((t=Object.create(t)).wrapped=!0),this.elementProperties.set(e,t),!t.noAccessor){const o=Symbol(),s=this.getPropertyDescriptor(e,o,t);void 0!==s&&l(this.prototype,e,s)}}static getPropertyDescriptor(e,t,o){const{get:s,set:i}=p(this.prototype,e)??{get(){return this[t]},set(e){this[t]=e}};return{get:s,set(t){const a=s?.call(this);i?.call(this,t),this.requestUpdate(e,a,o)},configurable:!0,enumerable:!0}}static getPropertyOptions(e){return this.elementProperties.get(e)??b}static _$Ei(){if(this.hasOwnProperty(m("elementProperties")))return;const e=_(this);e.finalize(),void 0!==e.l&&(this.l=[...e.l]),this.elementProperties=new Map(e.elementProperties)}static finalize(){if(this.hasOwnProperty(m("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(m("properties"))){const e=this.properties,t=[...d(e),...h(e)];for(const o of t)this.createProperty(o,e[o])}const e=this[Symbol.metadata];if(null!==e){const t=litPropertyMetadata.get(e);if(void 0!==t)for(const[e,o]of t)this.elementProperties.set(e,o)}this._$Eh=new Map;for(const[e,t]of this.elementProperties){const o=this._$Eu(e,t);void 0!==o&&this._$Eh.set(o,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(e){const t=[];if(Array.isArray(e)){const o=new Set(e.flat(1/0).reverse());for(const e of o)t.unshift(n(e))}else void 0!==e&&t.push(n(e));return t}static _$Eu(e,t){const o=t.attribute;return!1===o?void 0:"string"==typeof o?o:"string"==typeof e?e.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(e=>e(this))}addController(e){(this._$EO??=new Set).add(e),void 0!==this.renderRoot&&this.isConnected&&e.hostConnected?.()}removeController(e){this._$EO?.delete(e)}_$E_(){const e=new Map,t=this.constructor.elementProperties;for(const o of t.keys())this.hasOwnProperty(o)&&(e.set(o,this[o]),delete this[o]);e.size>0&&(this._$Ep=e)}createRenderRoot(){const e=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((e,s)=>{if(o)e.adoptedStyleSheets=s.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(const o of s){const s=document.createElement("style"),i=t.litNonce;void 0!==i&&s.setAttribute("nonce",i),s.textContent=o.cssText,e.appendChild(s)}})(e,this.constructor.elementStyles),e}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(e=>e.hostConnected?.())}enableUpdating(e){}disconnectedCallback(){this._$EO?.forEach(e=>e.hostDisconnected?.())}attributeChangedCallback(e,t,o){this._$AK(e,o)}_$ET(e,t){const o=this.constructor.elementProperties.get(e),s=this.constructor._$Eu(e,o);if(void 0!==s&&!0===o.reflect){const i=(void 0!==o.converter?.toAttribute?o.converter:$).toAttribute(t,o.type);this._$Em=e,null==i?this.removeAttribute(s):this.setAttribute(s,i),this._$Em=null}}_$AK(e,t){const o=this.constructor,s=o._$Eh.get(e);if(void 0!==s&&this._$Em!==s){const e=o.getPropertyOptions(s),i="function"==typeof e.converter?{fromAttribute:e.converter}:void 0!==e.converter?.fromAttribute?e.converter:$;this._$Em=s;const a=i.fromAttribute(t,e.type);this[s]=a??this._$Ej?.get(s)??a,this._$Em=null}}requestUpdate(e,t,o,s=!1,i){if(void 0!==e){const a=this.constructor;if(!1===s&&(i=this[e]),o??=a.getPropertyOptions(e),!((o.hasChanged??y)(i,t)||o.useDefault&&o.reflect&&i===this._$Ej?.get(e)&&!this.hasAttribute(a._$Eu(e,o))))return;this.C(e,t,o)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(e,t,{useDefault:o,reflect:s,wrapped:i},a){o&&!(this._$Ej??=new Map).has(e)&&(this._$Ej.set(e,a??t??this[e]),!0!==i||void 0!==a)||(this._$AL.has(e)||(this.hasUpdated||o||(t=void 0),this._$AL.set(e,t)),!0===s&&this._$Em!==e&&(this._$Eq??=new Set).add(e))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}const e=this.scheduleUpdate();return null!=e&&await e,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[e,t]of this._$Ep)this[e]=t;this._$Ep=void 0}const e=this.constructor.elementProperties;if(e.size>0)for(const[t,o]of e){const{wrapped:e}=o,s=this[t];!0!==e||this._$AL.has(t)||void 0===s||this.C(t,void 0,o,s)}}let e=!1;const t=this._$AL;try{e=this.shouldUpdate(t),e?(this.willUpdate(t),this._$EO?.forEach(e=>e.hostUpdate?.()),this.update(t)):this._$EM()}catch(t){throw e=!1,this._$EM(),t}e&&this._$AE(t)}willUpdate(e){}_$AE(e){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(e)),this.updated(e)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(e){return!0}update(e){this._$Eq&&=this._$Eq.forEach(e=>this._$ET(e,this[e])),this._$EM()}updated(e){}firstUpdated(e){}};w.elementStyles=[],w.shadowRootOptions={mode:"open"},w[m("elementProperties")]=new Map,w[m("finalized")]=new Map,v?.({ReactiveElement:w}),(u.reactiveElementVersions??=[]).push("2.1.2");const x=globalThis,A=e=>e,k=x.trustedTypes,E=k?k.createPolicy("lit-html",{createHTML:e=>e}):void 0,z="$lit$",S=`lit$${Math.random().toFixed(9).slice(2)}$`,C="?"+S,P=`<${C}>`,M=document,O=()=>M.createComment(""),F=e=>null===e||"object"!=typeof e&&"function"!=typeof e,W=Array.isArray,U="[ \t\n\f\r]",N=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,R=/-->/g,T=/>/g,j=RegExp(`>|${U}(?:([^\\s"'>=/]+)(${U}*=${U}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),B=/'/g,H=/"/g,D=/^(?:script|style|textarea|title)$/i,q=(e=>(t,...o)=>({_$litType$:e,strings:t,values:o}))(1),L=Symbol.for("lit-noChange"),I=Symbol.for("lit-nothing"),V=new WeakMap,J=M.createTreeWalker(M,129);function G(e,t){if(!W(e)||!e.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==E?E.createHTML(t):t}const K=(e,t)=>{const o=e.length-1,s=[];let i,a=2===t?"<svg>":3===t?"<math>":"",r=N;for(let t=0;t<o;t++){const o=e[t];let n,c,l=-1,p=0;for(;p<o.length&&(r.lastIndex=p,c=r.exec(o),null!==c);)p=r.lastIndex,r===N?"!--"===c[1]?r=R:void 0!==c[1]?r=T:void 0!==c[2]?(D.test(c[2])&&(i=RegExp("</"+c[2],"g")),r=j):void 0!==c[3]&&(r=j):r===j?">"===c[0]?(r=i??N,l=-1):void 0===c[1]?l=-2:(l=r.lastIndex-c[2].length,n=c[1],r=void 0===c[3]?j:'"'===c[3]?H:B):r===H||r===B?r=j:r===R||r===T?r=N:(r=j,i=void 0);const d=r===j&&e[t+1].startsWith("/>")?" ":"";a+=r===N?o+P:l>=0?(s.push(n),o.slice(0,l)+z+o.slice(l)+S+d):o+S+(-2===l?t:d)}return[G(e,a+(e[o]||"<?>")+(2===t?"</svg>":3===t?"</math>":"")),s]};class Z{constructor({strings:e,_$litType$:t},o){let s;this.parts=[];let i=0,a=0;const r=e.length-1,n=this.parts,[c,l]=K(e,t);if(this.el=Z.createElement(c,o),J.currentNode=this.el.content,2===t||3===t){const e=this.el.content.firstChild;e.replaceWith(...e.childNodes)}for(;null!==(s=J.nextNode())&&n.length<r;){if(1===s.nodeType){if(s.hasAttributes())for(const e of s.getAttributeNames())if(e.endsWith(z)){const t=l[a++],o=s.getAttribute(e).split(S),r=/([.?@])?(.*)/.exec(t);n.push({type:1,index:i,name:r[2],strings:o,ctor:"."===r[1]?te:"?"===r[1]?oe:"@"===r[1]?se:ee}),s.removeAttribute(e)}else e.startsWith(S)&&(n.push({type:6,index:i}),s.removeAttribute(e));if(D.test(s.tagName)){const e=s.textContent.split(S),t=e.length-1;if(t>0){s.textContent=k?k.emptyScript:"";for(let o=0;o<t;o++)s.append(e[o],O()),J.nextNode(),n.push({type:2,index:++i});s.append(e[t],O())}}}else if(8===s.nodeType)if(s.data===C)n.push({type:2,index:i});else{let e=-1;for(;-1!==(e=s.data.indexOf(S,e+1));)n.push({type:7,index:i}),e+=S.length-1}i++}}static createElement(e,t){const o=M.createElement("template");return o.innerHTML=e,o}}function Y(e,t,o=e,s){if(t===L)return t;let i=void 0!==s?o._$Co?.[s]:o._$Cl;const a=F(t)?void 0:t._$litDirective$;return i?.constructor!==a&&(i?._$AO?.(!1),void 0===a?i=void 0:(i=new a(e),i._$AT(e,o,s)),void 0!==s?(o._$Co??=[])[s]=i:o._$Cl=i),void 0!==i&&(t=Y(e,i._$AS(e,t.values),i,s)),t}class Q{constructor(e,t){this._$AV=[],this._$AN=void 0,this._$AD=e,this._$AM=t}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(e){const{el:{content:t},parts:o}=this._$AD,s=(e?.creationScope??M).importNode(t,!0);J.currentNode=s;let i=J.nextNode(),a=0,r=0,n=o[0];for(;void 0!==n;){if(a===n.index){let t;2===n.type?t=new X(i,i.nextSibling,this,e):1===n.type?t=new n.ctor(i,n.name,n.strings,this,e):6===n.type&&(t=new ie(i,this,e)),this._$AV.push(t),n=o[++r]}a!==n?.index&&(i=J.nextNode(),a++)}return J.currentNode=M,s}p(e){let t=0;for(const o of this._$AV)void 0!==o&&(void 0!==o.strings?(o._$AI(e,o,t),t+=o.strings.length-2):o._$AI(e[t])),t++}}class X{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(e,t,o,s){this.type=2,this._$AH=I,this._$AN=void 0,this._$AA=e,this._$AB=t,this._$AM=o,this.options=s,this._$Cv=s?.isConnected??!0}get parentNode(){let e=this._$AA.parentNode;const t=this._$AM;return void 0!==t&&11===e?.nodeType&&(e=t.parentNode),e}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(e,t=this){e=Y(this,e,t),F(e)?e===I||null==e||""===e?(this._$AH!==I&&this._$AR(),this._$AH=I):e!==this._$AH&&e!==L&&this._(e):void 0!==e._$litType$?this.$(e):void 0!==e.nodeType?this.T(e):(e=>W(e)||"function"==typeof e?.[Symbol.iterator])(e)?this.k(e):this._(e)}O(e){return this._$AA.parentNode.insertBefore(e,this._$AB)}T(e){this._$AH!==e&&(this._$AR(),this._$AH=this.O(e))}_(e){this._$AH!==I&&F(this._$AH)?this._$AA.nextSibling.data=e:this.T(M.createTextNode(e)),this._$AH=e}$(e){const{values:t,_$litType$:o}=e,s="number"==typeof o?this._$AC(e):(void 0===o.el&&(o.el=Z.createElement(G(o.h,o.h[0]),this.options)),o);if(this._$AH?._$AD===s)this._$AH.p(t);else{const e=new Q(s,this),o=e.u(this.options);e.p(t),this.T(o),this._$AH=e}}_$AC(e){let t=V.get(e.strings);return void 0===t&&V.set(e.strings,t=new Z(e)),t}k(e){W(this._$AH)||(this._$AH=[],this._$AR());const t=this._$AH;let o,s=0;for(const i of e)s===t.length?t.push(o=new X(this.O(O()),this.O(O()),this,this.options)):o=t[s],o._$AI(i),s++;s<t.length&&(this._$AR(o&&o._$AB.nextSibling,s),t.length=s)}_$AR(e=this._$AA.nextSibling,t){for(this._$AP?.(!1,!0,t);e!==this._$AB;){const t=A(e).nextSibling;A(e).remove(),e=t}}setConnected(e){void 0===this._$AM&&(this._$Cv=e,this._$AP?.(e))}}class ee{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(e,t,o,s,i){this.type=1,this._$AH=I,this._$AN=void 0,this.element=e,this.name=t,this._$AM=s,this.options=i,o.length>2||""!==o[0]||""!==o[1]?(this._$AH=Array(o.length-1).fill(new String),this.strings=o):this._$AH=I}_$AI(e,t=this,o,s){const i=this.strings;let a=!1;if(void 0===i)e=Y(this,e,t,0),a=!F(e)||e!==this._$AH&&e!==L,a&&(this._$AH=e);else{const s=e;let r,n;for(e=i[0],r=0;r<i.length-1;r++)n=Y(this,s[o+r],t,r),n===L&&(n=this._$AH[r]),a||=!F(n)||n!==this._$AH[r],n===I?e=I:e!==I&&(e+=(n??"")+i[r+1]),this._$AH[r]=n}a&&!s&&this.j(e)}j(e){e===I?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,e??"")}}class te extends ee{constructor(){super(...arguments),this.type=3}j(e){this.element[this.name]=e===I?void 0:e}}class oe extends ee{constructor(){super(...arguments),this.type=4}j(e){this.element.toggleAttribute(this.name,!!e&&e!==I)}}class se extends ee{constructor(e,t,o,s,i){super(e,t,o,s,i),this.type=5}_$AI(e,t=this){if((e=Y(this,e,t,0)??I)===L)return;const o=this._$AH,s=e===I&&o!==I||e.capture!==o.capture||e.once!==o.once||e.passive!==o.passive,i=e!==I&&(o===I||s);s&&this.element.removeEventListener(this.name,this,o),i&&this.element.addEventListener(this.name,this,e),this._$AH=e}handleEvent(e){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,e):this._$AH.handleEvent(e)}}class ie{constructor(e,t,o){this.element=e,this.type=6,this._$AN=void 0,this._$AM=t,this.options=o}get _$AU(){return this._$AM._$AU}_$AI(e){Y(this,e)}}const ae=x.litHtmlPolyfillSupport;ae?.(Z,X),(x.litHtmlVersions??=[]).push("3.3.3");const re=globalThis;class ne extends w{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const e=super.createRenderRoot();return this.renderOptions.renderBefore??=e.firstChild,e}update(e){const t=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(e),this._$Do=((e,t,o)=>{const s=o?.renderBefore??t;let i=s._$litPart$;if(void 0===i){const e=o?.renderBefore??null;s._$litPart$=i=new X(t.insertBefore(O(),e),e,void 0,o??{})}return i._$AI(e),i})(t,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return L}}ne._$litElement$=!0,ne.finalized=!0,re.litElementHydrateSupport?.({LitElement:ne});const ce=re.litElementPolyfillSupport;ce?.({LitElement:ne}),(re.litElementVersions??=[]).push("4.2.2");const le=e=>(t,o)=>{void 0!==o?o.addInitializer(()=>{customElements.define(e,t)}):customElements.define(e,t)},pe={attribute:!0,type:String,converter:$,reflect:!1,hasChanged:y},de=(e=pe,t,o)=>{const{kind:s,metadata:i}=o;let a=globalThis.litPropertyMetadata.get(i);if(void 0===a&&globalThis.litPropertyMetadata.set(i,a=new Map),"setter"===s&&((e=Object.create(e)).wrapped=!0),a.set(o.name,e),"accessor"===s){const{name:s}=o;return{set(o){const i=t.get.call(this);t.set.call(this,o),this.requestUpdate(s,i,e,!0,o)},init(t){return void 0!==t&&this.C(s,void 0,e,t),t}}}if("setter"===s){const{name:s}=o;return function(o){const i=this[s];t.call(this,o),this.requestUpdate(s,i,e,!0,o)}}throw Error("Unsupported decorator location: "+s)};function he(e){return(t,o)=>"object"==typeof o?de(e,t,o):((e,t,o)=>{const s=t.hasOwnProperty(o);return t.constructor.createProperty(o,e),s?Object.getOwnPropertyDescriptor(t,o):void 0})(e,t,o)}function _e(e){return he({...e,state:!0,attribute:!1})}var ue,ge;!function(e){e.language="language",e.system="system",e.comma_decimal="comma_decimal",e.decimal_comma="decimal_comma",e.space_comma="space_comma",e.none="none"}(ue||(ue={})),function(e){e.language="language",e.system="system",e.am_pm="12",e.twenty_four="24"}(ge||(ge={}));const fe=(e,t,o,s)=>{s=s||{},o=null==o?{}:o;const i=new Event(t,{bubbles:void 0===s.bubbles||s.bubbles,cancelable:Boolean(s.cancelable),composed:void 0===s.composed||s.composed});return i.detail=o,e.dispatchEvent(i),i},ve={en:{"status.export":"Exporting {power}W to grid","status.import":"Importing {power}W from grid","status.balanced":"Balanced consumption","status.restart":"Restart required","status.update":"Update available","flow.solar":"Solar","flow.house":"Consumption","flow.grid":"Grid","section.phases":"Phases","section.totals":"Totals","section.daily":"Daily Energy","section.costs":"Costs","section.device":"Device","section.control":"Control","phase.voltage":"Voltage","phase.current":"Current","phase.pf":"Power Factor","phase.freq":"Frequency","phase.apparent":"Apparent","phase.pf_pct":"PF %","total.active_power":"Active Power","total.apparent_power":"Apparent Power","total.current":"Total Current","total.power_factor":"Power Factor","total.energy_in":"Energy Consumed","total.energy_out":"Energy Returned","total.cost":"Total Cost","daily.house":"House Consumption","daily.grid_import":"Grid Import","daily.grid_export":"Grid Export","daily.heat_pump":"Heat Pump","cost.daily":"Estimated daily cost (grid)","cost.rate":"{kwh} kWh × {rate}/kWh","device.uptime":"Uptime","device.cloud":"Cloud","device.local":"Local","device.online":"Online","device.offline":"Offline","device.restart_needed":"Restart required","device.update_avail":"Update available","device.beta_update":"Beta update","ctrl.reboot":"Reboot","ctrl.ble":"BLE","ctrl.monitor":"Monitor JS","ctrl.on":"ON","ctrl.off":"OFF","footer.update":"Update:","no_device.title":"Shelly Smart Meter","no_device.msg":"No Shelly Pro 3EM entities found.","no_device.hint":"Add entities manually in config or check the integration.","phase.A":"Phase A","phase.B":"Phase B","phase.C":"Phase C"},ro:{"status.export":"Export {power}W în rețea","status.import":"Import {power}W din rețea","status.balanced":"Consum echilibrat","status.restart":"Restart necesar","status.update":"Update disponibil","flow.solar":"Solar","flow.house":"Consum","flow.grid":"Rețea","section.phases":"Faze","section.totals":"Totaluri","section.daily":"Energie zilnică","section.costs":"Costuri","section.device":"Device","section.control":"Control","phase.voltage":"Tensiune","phase.current":"Curent","phase.pf":"Factor putere","phase.freq":"Frecvență","phase.apparent":"Aparentă","phase.pf_pct":"PF %","total.active_power":"Putere activă","total.apparent_power":"Putere aparentă","total.current":"Curent total","total.power_factor":"Factor putere","total.energy_in":"Energie consumată","total.energy_out":"Energie returnată","total.cost":"Cost total","daily.house":"Consum casă","daily.grid_import":"Import rețea","daily.grid_export":"Export rețea","daily.heat_pump":"Pompă căldură","cost.daily":"Cost estimat azi (rețea)","cost.rate":"{kwh} kWh × {rate}/kWh","device.uptime":"Uptime","device.cloud":"Cloud","device.local":"Local","device.online":"Online","device.offline":"Offline","device.restart_needed":"Restart necesar","device.update_avail":"Update disponibil","device.beta_update":"Beta update","ctrl.reboot":"Reboot","ctrl.ble":"BLE","ctrl.monitor":"Monitor JS","ctrl.on":"Pornit","ctrl.off":"Oprit","footer.update":"Update:","no_device.title":"Shelly Smart Meter","no_device.msg":"Nu s-au găsit entități Shelly Pro 3EM.","no_device.hint":"Adaugă entitățile manual sau verifică integrarea.","phase.A":"Faza A","phase.B":"Faza B","phase.C":"Faza C"},de:{"status.export":"{power}W ins Netz exportiert","status.import":"{power}W aus dem Netz importiert","status.balanced":"Ausgeglichener Verbrauch","status.restart":"Neustart erforderlich","status.update":"Update verfügbar","flow.solar":"Solar","flow.house":"Verbrauch","flow.grid":"Netz","section.phases":"Phasen","section.totals":"Gesamt","section.daily":"Tagesenergie","section.costs":"Kosten","section.device":"Gerät","section.control":"Steuerung","phase.A":"Phase A","phase.B":"Phase B","phase.C":"Phase C","phase.voltage":"Spannung","phase.current":"Strom","phase.pf":"Leistungsfaktor","phase.freq":"Frequenz","phase.apparent":"Scheinleistung","phase.pf_pct":"PF %","total.active_power":"Wirkleistung","total.apparent_power":"Scheinleistung","total.current":"Gesamtstrom","total.power_factor":"Leistungsfaktor","total.energy_in":"Verbrauchte Energie","total.energy_out":"Rückspeisung","total.cost":"Gesamtkosten","daily.house":"Hausverbrauch","daily.grid_import":"Netzbezug","daily.grid_export":"Netzeinspeisung","daily.heat_pump":"Wärmepumpe","cost.daily":"Geschätzte Tageskosten (Netz)","cost.rate":"{kwh} kWh × {rate}/kWh","device.uptime":"Betriebszeit","device.cloud":"Cloud","device.local":"Lokal","device.online":"Online","device.offline":"Offline","device.restart_needed":"Neustart erforderlich","device.update_avail":"Update verfügbar","device.beta_update":"Beta-Update","ctrl.reboot":"Neustart","ctrl.ble":"BLE","ctrl.monitor":"Monitor JS","ctrl.on":"EIN","ctrl.off":"AUS","footer.update":"Update:","no_device.title":"Shelly Smart Meter","no_device.msg":"Keine Shelly Pro 3EM Entitäten gefunden.","no_device.hint":"Entitäten manuell konfigurieren oder Integration prüfen."},fr:{"status.export":"Export {power}W vers le réseau","status.import":"Import {power}W du réseau","status.balanced":"Consommation équilibrée","status.restart":"Redémarrage requis","status.update":"Mise à jour disponible","flow.solar":"Solaire","flow.house":"Consommation","flow.grid":"Réseau","section.phases":"Phases","section.totals":"Totaux","section.daily":"Énergie quotidienne","section.costs":"Coûts","section.device":"Appareil","section.control":"Contrôle","phase.A":"Phase A","phase.B":"Phase B","phase.C":"Phase C","phase.voltage":"Tension","phase.current":"Courant","phase.pf":"Facteur de puissance","phase.freq":"Fréquence","phase.apparent":"Apparente","phase.pf_pct":"FP %","total.active_power":"Puissance active","total.apparent_power":"Puissance apparente","total.current":"Courant total","total.power_factor":"Facteur de puissance","total.energy_in":"Énergie consommée","total.energy_out":"Énergie renvoyée","total.cost":"Coût total","daily.house":"Consommation maison","daily.grid_import":"Import réseau","daily.grid_export":"Export réseau","daily.heat_pump":"Pompe à chaleur","cost.daily":"Coût quotidien estimé (réseau)","cost.rate":"{kwh} kWh × {rate}/kWh","device.uptime":"Temps de fonctionnement","device.cloud":"Cloud","device.local":"Local","device.online":"En ligne","device.offline":"Hors ligne","device.restart_needed":"Redémarrage requis","device.update_avail":"Mise à jour disponible","device.beta_update":"Mise à jour bêta","ctrl.reboot":"Redémarrer","ctrl.ble":"BLE","ctrl.monitor":"Monitor JS","ctrl.on":"ON","ctrl.off":"OFF","footer.update":"Mise à jour :","no_device.title":"Shelly Smart Meter","no_device.msg":"Aucune entité Shelly Pro 3EM trouvée.","no_device.hint":"Ajoutez les entités manuellement ou vérifiez l'intégration."},es:{"status.export":"Exportando {power}W a la red","status.import":"Importando {power}W de la red","status.balanced":"Consumo equilibrado","status.restart":"Reinicio necesario","status.update":"Actualización disponible","flow.solar":"Solar","flow.house":"Consumo","flow.grid":"Red","section.phases":"Fases","section.totals":"Totales","section.daily":"Energía diaria","section.costs":"Costes","section.device":"Dispositivo","section.control":"Control","phase.A":"Fase A","phase.B":"Fase B","phase.C":"Fase C","phase.voltage":"Voltaje","phase.current":"Corriente","phase.pf":"Factor de potencia","phase.freq":"Frecuencia","phase.apparent":"Aparente","phase.pf_pct":"FP %","total.active_power":"Potencia activa","total.apparent_power":"Potencia aparente","total.current":"Corriente total","total.power_factor":"Factor de potencia","total.energy_in":"Energía consumida","total.energy_out":"Energía devuelta","total.cost":"Coste total","daily.house":"Consumo casa","daily.grid_import":"Importación red","daily.grid_export":"Exportación red","daily.heat_pump":"Bomba de calor","cost.daily":"Coste diario estimado (red)","cost.rate":"{kwh} kWh × {rate}/kWh","device.uptime":"Tiempo activo","device.cloud":"Nube","device.local":"Local","device.online":"En línea","device.offline":"Desconectado","device.restart_needed":"Reinicio necesario","device.update_avail":"Actualización disponible","device.beta_update":"Actualización beta","ctrl.reboot":"Reiniciar","ctrl.ble":"BLE","ctrl.monitor":"Monitor JS","ctrl.on":"ON","ctrl.off":"OFF","footer.update":"Actualización:","no_device.title":"Shelly Smart Meter","no_device.msg":"No se encontraron entidades Shelly Pro 3EM.","no_device.hint":"Añada entidades manualmente o compruebe la integración."},it:{"status.export":"Esportazione {power}W alla rete","status.import":"Importazione {power}W dalla rete","status.balanced":"Consumo bilanciato","status.restart":"Riavvio necessario","status.update":"Aggiornamento disponibile","flow.solar":"Solare","flow.house":"Consumo","flow.grid":"Rete","section.phases":"Fasi","section.totals":"Totali","section.daily":"Energia giornaliera","section.costs":"Costi","section.device":"Dispositivo","section.control":"Controllo","phase.A":"Fase A","phase.B":"Fase B","phase.C":"Fase C","total.active_power":"Potenza attiva","total.apparent_power":"Potenza apparente","total.current":"Corrente totale","total.power_factor":"Fattore di potenza","total.energy_in":"Energia consumata","total.energy_out":"Energia restituita","total.cost":"Costo totale","daily.house":"Consumo casa","daily.grid_import":"Import rete","daily.grid_export":"Export rete","daily.heat_pump":"Pompa di calore","cost.daily":"Costo giornaliero stimato (rete)","cost.rate":"{kwh} kWh × {rate}/kWh","ctrl.reboot":"Riavvia","ctrl.ble":"BLE","ctrl.monitor":"Monitor JS","ctrl.on":"ON","ctrl.off":"OFF","no_device.title":"Shelly Smart Meter","no_device.msg":"Nessuna entità Shelly Pro 3EM trovata.","no_device.hint":"Aggiungi entità manualmente o controlla l'integrazione."},pl:{"status.export":"Eksport {power}W do sieci","status.import":"Import {power}W z sieci","status.balanced":"Zrównoważone zużycie","status.restart":"Wymagany restart","status.update":"Dostępna aktualizacja","flow.solar":"Fotowoltaika","flow.house":"Zużycie","flow.grid":"Sieć","section.phases":"Fazy","section.totals":"Sumy","section.daily":"Energia dzienna","section.costs":"Koszty","section.device":"Urządzenie","section.control":"Sterowanie","phase.A":"Faza A","phase.B":"Faza B","phase.C":"Faza C","total.active_power":"Moc czynna","total.apparent_power":"Moc pozorna","total.current":"Prąd całkowity","total.power_factor":"Współczynnik mocy","total.energy_in":"Energia zużyta","total.energy_out":"Energia oddana","total.cost":"Koszt całkowity","daily.house":"Zużycie domu","daily.grid_import":"Import z sieci","daily.grid_export":"Eksport do sieci","daily.heat_pump":"Pompa ciepła","cost.daily":"Szacowany koszt dzienny (sieć)","cost.rate":"{kwh} kWh × {rate}/kWh","ctrl.reboot":"Uruchom ponownie","ctrl.ble":"BLE","ctrl.monitor":"Monitor JS","ctrl.on":"WŁ","ctrl.off":"WYŁ","no_device.title":"Shelly Smart Meter","no_device.msg":"Nie znaleziono encji Shelly Pro 3EM.","no_device.hint":"Dodaj encje ręcznie lub sprawdź integrację."},hu:{"status.export":"{power}W exportálva a hálózatba","status.import":"{power}W importálva a hálózatból","status.balanced":"Kiegyensúlyozott fogyasztás","status.restart":"Újraindítás szükséges","status.update":"Frissítés elérhető","flow.solar":"Napelem","flow.house":"Fogyasztás","flow.grid":"Hálózat","section.phases":"Fázisok","section.totals":"Összesítő","section.daily":"Napi energia","section.costs":"Költségek","section.device":"Eszköz","section.control":"Vezérlés","phase.A":"A fázis","phase.B":"B fázis","phase.C":"C fázis","total.active_power":"Aktív teljesítmény","total.apparent_power":"Látszólagos teljesítmény","total.current":"Összes áram","total.power_factor":"Teljesítménytényező","total.energy_in":"Felhasznált energia","total.energy_out":"Visszatáplált energia","total.cost":"Összes költség","daily.house":"Háztartási fogyasztás","daily.grid_import":"Hálózati import","daily.grid_export":"Hálózati export","daily.heat_pump":"Hőszivattyú","cost.daily":"Becsült napi költség (hálózat)","cost.rate":"{kwh} kWh × {rate}/kWh","ctrl.reboot":"Újraindítás","ctrl.ble":"BLE","ctrl.monitor":"Monitor JS","ctrl.on":"BE","ctrl.off":"KI","no_device.title":"Shelly Smart Meter","no_device.msg":"Nem található Shelly Pro 3EM entitás.","no_device.hint":"Adja hozzá manuálisan vagy ellenőrizze az integrációt."}};function me(e,t){if(t&&t in ve)return t;const o=(e.language||e.locale?.language||"en").toLowerCase().split("-")[0];return o in ve?o:"en"}function $e(e,t,o){let s=ve[e]?.[t]||ve.en[t]||t;if(o)for(const[e,t]of Object.entries(o))s=s.replace(`{${e}}`,String(t));return s}const ye="ha-shelly-smart-meter-card";console.info("%c ⚡ SHELLY-SMART-METER-CARD %c v3.0.0 ","color:#fff;background:#f59e0b;font-weight:700;border-radius:4px 0 0 4px;padding:2px 6px;","color:#fff;background:#6b7280;font-weight:700;border-radius:0 4px 4px 0;padding:2px 6px;");const be={phase_a_power:"_phase_a_active_power",phase_a_apparent:"_phase_a_apparent_power",phase_a_voltage:"_phase_a_voltage",phase_a_current:"_phase_a_current",phase_a_pf:"_phase_a_power_factor",phase_a_freq:"_phase_a_frequency",phase_a_energy:"_phase_a_total_active_energy",phase_a_returned:"_phase_a_total_active_returned_energy",phase_b_power:"_phase_b_active_power",phase_b_apparent:"_phase_b_apparent_power",phase_b_voltage:"_phase_b_voltage",phase_b_current:"_phase_b_current",phase_b_pf:"_phase_b_power_factor",phase_b_freq:"_phase_b_frequency",phase_b_energy:"_phase_b_total_active_energy",phase_b_returned:"_phase_b_total_active_returned_energy",phase_c_power:"_phase_c_active_power",phase_c_apparent:"_phase_c_apparent_power",phase_c_voltage:"_phase_c_voltage",phase_c_current:"_phase_c_current",phase_c_pf:"_phase_c_power_factor",phase_c_freq:"_phase_c_frequency",phase_c_energy:"_phase_c_total_active_energy",phase_c_returned:"_phase_c_total_active_returned_energy",total_power:"_total_active_power",total_apparent:"_total_apparent_power",total_current:"_total_current",total_energy:"_total_active_energy",total_returned:"_total_active_returned_energy",total_cost:"_total_active_energy_cost",temperature:"_temperature",rssi:"_rssi",uptime:"_uptime"},we={cloud:"_cloud",restart_required:"_restart_required"},xe={firmware:"_firmware_update",beta_firmware:"_beta_firmware_update"},Ae={ble_integration:"_aioshelly_ble_integration",monitor_production:"_monitor_production_js"},ke={reboot:"_reboot"};let Ee=null;function ze(e){if(Ee)return Ee;const t=Object.keys(e.states).find(e=>e.startsWith("sensor.")&&e.endsWith("_phase_a_active_power"));if(!t)return{};const o=t.replace("sensor.","").replace("_phase_a_active_power",""),s={};for(const[t,i]of Object.entries(be)){const a=`sensor.${o}${i}`;e.states[a]&&(s[t]=a)}for(const[t,i]of Object.entries(we)){const a=`binary_sensor.${o}${i}`;e.states[a]&&(s[t]=a)}for(const[t,i]of Object.entries(xe)){const a=`update.${o}${i}`;e.states[a]&&(s[t]=a)}for(const[t,i]of Object.entries(Ae)){const a=`switch.${o}${i}`;e.states[a]&&(s[t]=a)}for(const[t,i]of Object.entries(ke)){const a=`button.${o}${i}`;e.states[a]&&(s[t]=a)}const i=`device_tracker.${o}`;return e.states[i]&&(s.device_tracker=i),Ee=s,s}let Se=class extends ne{constructor(){super(...arguments),this._showPhaseDetails=!1,this._showTotals=!1}static async getConfigElement(){return await Promise.resolve().then(function(){return Me}),document.createElement("ha-shelly-smart-meter-editor")}static getStubConfig(){return{type:ye,title:"⚡ Smart Meter",show_header:!0,show_flow:!0,show_phases:!0,show_totals:!0,show_energy:!0,show_costs:!0,show_device:!0,show_controls:!1,cost_per_kwh:.85,cost_currency:"RON",entities:{},phase_labels:{}}}setConfig(e){if(!e)throw new Error("Invalid config");Ee=null,this.config={...e,type:ye,title:e.title||"⚡ Smart Meter",show_header:e.show_header??!0,show_flow:e.show_flow??!0,show_phases:e.show_phases??!0,show_totals:e.show_totals??!0,show_energy:e.show_energy??!0,show_costs:e.show_costs??!0,show_device:e.show_device??!0,show_controls:e.show_controls??!1,cost_per_kwh:e.cost_per_kwh??.85,cost_currency:e.cost_currency||"RON",entities:e.entities||{},phase_labels:e.phase_labels||{}}}get L(){return me(this.hass,this.config?.language)}_r(e){return this.config.entities?.[e]||this.hass&&ze(this.hass)[e]||""}_s(e){const t=this._r(e);return t?this.hass?.states[t]?.state:void 0}_n(e){const t=parseFloat(this._s(e)||"");return isNaN(t)?0:t}_e(e){return this._r(e)}_changed(e){const t=this._r(e);if(!t)return"";const o=this.hass?.states[t];if(!o?.last_changed)return"";const s=Math.floor((Date.now()-new Date(o.last_changed).getTime())/6e4);if(s<1)return"acum";if(s<60)return`${s} min`;const i=Math.floor(s/60);return i<24?`${i}h ${s%60}min`:`${Math.floor(i/24)}d ${i%24}h`}_more(e){e&&fe(this,"hass-more-info",{entityId:e})}_fmt(e,t=1){return Math.abs(e)>=1e3?(e/1e3).toFixed(t)+"k":e.toFixed(t)}_fmtDate(e){try{const t=Date.now()-new Date(e).getTime(),o=Math.floor(t/864e5),s=Math.floor(t%864e5/36e5);return o>0?`${o}d ${s}h`:`${s}h ${Math.floor(t%36e5/6e4)}min`}catch{return e}}getCardSize(){return 8}render(){if(!this.config||!this.hass)return I;const e=this.L,t=ze(this.hass);if(!(Object.keys(t).length>0||Object.keys(this.config.entities||{}).length>0))return q`<ha-card>
+        <div class="header importing"><div class="header-icon">⚡</div>
+          <div class="header-text"><div class="header-title">${$e(e,"no_device.title")}</div>
+            <div class="header-sub">${$e(e,"no_device.msg")}</div></div></div>
+        <div class="content"><div class="no-device">
+          <ha-icon icon="mdi:alert-circle-outline"></ha-icon>
+          <p>${$e(e,"no_device.msg")}</p><p>${$e(e,"no_device.hint")}</p>
+        </div></div></ha-card>`;const o=this._n("total_power"),s=o<0,i=Math.abs(Math.round(o)),a=this._n("total_apparent"),r=a>0?Math.abs(o)/a:0,n=this.config.cost_currency||"RON",c=this.config.cost_per_kwh||.85,l=this._n("daily_grid"),p=l*c,d=this._s("temperature"),h=this._n("rssi"),_=this._s("uptime"),u="on"===this._s("cloud"),g="on"===this._s("restart_required"),f="on"===this._s("firmware"),v="on"===this._s("beta_firmware"),m="home"===this._s("device_tracker"),$="on"===this._s("ble_integration"),y="on"===this._s("monitor_production"),b=["a","b","c"].map(t=>({key:t.toUpperCase(),label:this.config.phase_labels?.[t.toUpperCase()]||$e(e,`phase.${t.toUpperCase()}`),power:this._n(`phase_${t}_power`),apparent:this._n(`phase_${t}_apparent`),voltage:this._n(`phase_${t}_voltage`),current:this._n(`phase_${t}_current`),pf:this._n(`phase_${t}_pf`),freq:this._n(`phase_${t}_freq`),energy:this._n(`phase_${t}_energy`),returned:this._n(`phase_${t}_returned`)})),w=s?$e(e,"status.export",{power:i}):o>50?$e(e,"status.import",{power:i}):$e(e,"status.balanced");return q`
       <ha-card>
-        <!-- HEADER -->
         ${!1!==this.config.show_header?q`
           <div class="header ${s?"exporting":"importing"}">
             <div class="header-icon">⚡</div>
             <div class="header-text">
               <div class="header-title">${this.config.title}</div>
-              <div class="header-sub">
-                ${s?`↗ Export ${i}W în rețea`:e>50?`↙ Import ${i}W din rețea`:"⚖ Consum echilibrat"}
-                ${m?" · ⚠️ Restart necesar":""}
-                ${x?" · 🔄 Update disponibil":""}
+              <div class="header-sub">${w}
+                ${g?` · ⚠️ ${$e(e,"status.restart")}`:""}
+                ${f?` · 🔄 ${$e(e,"status.update")}`:""}
               </div>
             </div>
-            <div class="power-badge ${s?"export":"import"}">
-              ${s?"↗":"↙"} ${i}W
-            </div>
-          </div>
-        `:B}
+            <div class="power-badge ${s?"export":"import"}">${s?"↗":"↙"} ${i}W</div>
+          </div>`:I}
 
         <div class="content">
-
-          <!-- FLOW DIAGRAM -->
           ${!1!==this.config.show_flow?q`
-            <div class="flow">
-              <div class="flow-node solar ${s?"active":""}">
-                <ha-icon icon="mdi:solar-power-variant"></ha-icon>
-                <span class="flow-val">${s?i:0}W</span>
-                <small>Solar</small>
-              </div>
-              <div class="flow-arrow">
-                <div class="arrow-line ${s?"export":e>50?"import":"idle"}">
-                  <ha-icon icon=${s?"mdi:arrow-right-bold":e>50?"mdi:arrow-left-bold":"mdi:swap-horizontal"}></ha-icon>
-                </div>
-              </div>
-              <div class="flow-node house">
-                <ha-icon icon="mdi:home-lightning-bolt"></ha-icon>
-                <span class="flow-val">${Math.round(A||i)}W</span>
-                <small>Consum</small>
-              </div>
-              <div class="flow-arrow">
-                <div class="arrow-line ${!s&&e>50?"import":s?"export":"idle"}">
-                  <ha-icon icon=${!s&&e>50?"mdi:arrow-left-bold":"mdi:arrow-right-bold"}></ha-icon>
-                </div>
-              </div>
-              <div class="flow-node grid ${!s&&e>50?"active":""}">
-                <ha-icon icon="mdi:transmission-tower"></ha-icon>
-                <span class="flow-val">${!s&&e>50||s?i:0}W</span>
-                <small>Rețea</small>
-              </div>
+          <div class="flow">
+            <div class="flow-node solar ${s?"active":""}">
+              <ha-icon icon="mdi:solar-power-variant"></ha-icon>
+              <span class="flow-val">${s?i:0}W</span>
+              <small>${$e(e,"flow.solar")}</small>
             </div>
-          `:B}
+            <div class="flow-arrow"><div class="arrow-line ${s?"export":o>50?"import":"idle"}">
+              <ha-icon icon=${s?"mdi:arrow-right-bold":o>50?"mdi:arrow-left-bold":"mdi:swap-horizontal"}></ha-icon></div></div>
+            <div class="flow-node house">
+              <ha-icon icon="mdi:home-lightning-bolt"></ha-icon>
+              <span class="flow-val">${Math.round(a||i)}W</span>
+              <small>${$e(e,"flow.house")}</small>
+            </div>
+            <div class="flow-arrow"><div class="arrow-line ${!s&&o>50?"import":s?"export":"idle"}">
+              <ha-icon icon=${!s&&o>50?"mdi:arrow-left-bold":"mdi:arrow-right-bold"}></ha-icon></div></div>
+            <div class="flow-node grid ${!s&&o>50?"active":""}">
+              <ha-icon icon="mdi:transmission-tower"></ha-icon>
+              <span class="flow-val">${!s&&o>50||s?i:0}W</span>
+              <small>${$e(e,"flow.grid")}</small>
+            </div>
+          </div>`:I}
 
-          <!-- PHASES -->
           ${!1!==this.config.show_phases?q`
-            <div class="section-header" @click=${()=>{this._showPhaseDetails=!this._showPhaseDetails}}>
-              <span class="section-title">⚡ Faze</span>
-              <ha-icon .icon=${this._showPhaseDetails?"mdi:chevron-up":"mdi:chevron-down"}></ha-icon>
-            </div>
-            <div class="phases">
-              ${o.map(t=>{const e=Math.round(t.power),s=e<0;return q`
-                  <div class="phase-card" @click=${()=>this._more(this._e(`phase_${t.key.toLowerCase()}_power`))}>
-                    <div class="phase-header">
-                      <span class="phase-label">${t.key}</span>
-                      <span class="phase-name">${t.label}</span>
-                      <span class="phase-power ${s?"export":"import"}">${s?"↗":"↙"} ${Math.abs(e)}W</span>
-                    </div>
-                    ${this._showPhaseDetails?q`
-                      <div class="phase-details">
-                        <div class="pd"><ha-icon icon="mdi:flash"></ha-icon><span>${t.voltage.toFixed(1)}V</span></div>
-                        <div class="pd"><ha-icon icon="mdi:current-ac"></ha-icon><span>${t.current.toFixed(2)}A</span></div>
-                        <div class="pd"><ha-icon icon="mdi:cosine-wave"></ha-icon><span>PF ${t.pf.toFixed(2)}</span></div>
-                        <div class="pd"><ha-icon icon="mdi:sine-wave"></ha-icon><span>${t.freq.toFixed(1)}Hz</span></div>
-                        <div class="pd"><ha-icon icon="mdi:lightning-bolt"></ha-icon><span>${Math.round(t.apparent)}VA</span></div>
-                        <div class="pd"><ha-icon icon="mdi:counter"></ha-icon><span>${t.pf>=0?(100*t.pf).toFixed(0):"—"}%</span></div>
-                      </div>
-                      <div class="phase-energy">
-                        <span class="ein"><ha-icon icon="mdi:transmission-tower-import"></ha-icon>${t.energy.toFixed(1)} kWh</span>
-                        <span class="eout"><ha-icon icon="mdi:transmission-tower-export"></ha-icon>${t.returned.toFixed(1)} kWh</span>
-                      </div>
-                    `:B}
-                  </div>
-                `})}
-            </div>
-          `:B}
+          <div class="sh" @click=${()=>{this._showPhaseDetails=!this._showPhaseDetails}}>
+            <span class="st">⚡ ${$e(e,"section.phases")}</span>
+            <ha-icon .icon=${this._showPhaseDetails?"mdi:chevron-up":"mdi:chevron-down"}></ha-icon>
+          </div>
+          <div class="phases">${b.map(t=>{const o=Math.round(t.power),s=o<0;return q`<div class="pc" @click=${()=>this._more(this._e(`phase_${t.key.toLowerCase()}_power`))}>
+              <div class="ph"><span class="pl">${t.key}</span><span class="pn">${t.label}</span>
+                <span class="pp ${s?"export":"import"}">${s?"↗":"↙"} ${Math.abs(o)}W</span></div>
+              ${this._showPhaseDetails?q`
+                <div class="pd">
+                  <div class="di"><ha-icon icon="mdi:flash"></ha-icon><span>${t.voltage.toFixed(1)}V</span></div>
+                  <div class="di"><ha-icon icon="mdi:current-ac"></ha-icon><span>${t.current.toFixed(2)}A</span></div>
+                  <div class="di"><ha-icon icon="mdi:cosine-wave"></ha-icon><span>${$e(e,"phase.pf")} ${t.pf.toFixed(2)}</span></div>
+                  <div class="di"><ha-icon icon="mdi:sine-wave"></ha-icon><span>${t.freq.toFixed(1)}Hz</span></div>
+                  <div class="di"><ha-icon icon="mdi:lightning-bolt"></ha-icon><span>${Math.round(t.apparent)}VA</span></div>
+                  <div class="di"><ha-icon icon="mdi:counter"></ha-icon><span>${(100*t.pf).toFixed(0)}%</span></div>
+                </div>
+                <div class="pe">
+                  <span class="ein"><ha-icon icon="mdi:transmission-tower-import"></ha-icon>${t.energy.toFixed(1)} kWh</span>
+                  <span class="eout"><ha-icon icon="mdi:transmission-tower-export"></ha-icon>${t.returned.toFixed(1)} kWh</span>
+                </div>`:I}
+            </div>`})}</div>`:I}
 
-          <!-- TOTALS -->
           ${!1!==this.config.show_totals?q`
-            <div class="section-header" @click=${()=>{this._showTotals=!this._showTotals}}>
-              <span class="section-title">📊 Totaluri</span>
-              <ha-icon .icon=${this._showTotals?"mdi:chevron-up":"mdi:chevron-down"}></ha-icon>
-            </div>
-            ${this._showTotals?q`
-              <div class="totals-grid">
-                <div class="total-item" @click=${()=>this._more(this._e("total_power"))}>
-                  <ha-icon icon="mdi:flash"></ha-icon>
-                  <span class="tl">Putere activă</span>
-                  <span class="tv">${this._fmt(e)}W</span>
-                </div>
-                <div class="total-item" @click=${()=>this._more(this._e("total_apparent"))}>
-                  <ha-icon icon="mdi:lightning-bolt"></ha-icon>
-                  <span class="tl">Putere aparentă</span>
-                  <span class="tv">${this._fmt(A)}VA</span>
-                </div>
-                <div class="total-item" @click=${()=>this._more(this._e("total_current"))}>
-                  <ha-icon icon="mdi:current-ac"></ha-icon>
-                  <span class="tl">Curent total</span>
-                  <span class="tv">${this._n("total_current").toFixed(2)}A</span>
-                </div>
-                <div class="total-item">
-                  <ha-icon icon="mdi:cosine-wave"></ha-icon>
-                  <span class="tl">Power Factor</span>
-                  <span class="tv">${k.toFixed(2)}</span>
-                </div>
-                <div class="total-item" @click=${()=>this._more(this._e("total_energy"))}>
-                  <ha-icon icon="mdi:meter-electric"></ha-icon>
-                  <span class="tl">Energie consumată</span>
-                  <span class="tv">${this._fmt(l)} kWh</span>
-                </div>
-                <div class="total-item" @click=${()=>this._more(this._e("total_returned"))}>
-                  <ha-icon icon="mdi:flash-outline"></ha-icon>
-                  <span class="tl">Energie returnată</span>
-                  <span class="tv">${this._fmt(h)} kWh</span>
-                </div>
-                <div class="total-item" @click=${()=>this._more(this._e("total_cost"))}>
-                  <ha-icon icon="mdi:cash"></ha-icon>
-                  <span class="tl">Cost total</span>
-                  <span class="tv">${d.toFixed(2)} RON</span>
-                </div>
-              </div>
-            `:B}
-          `:B}
+          <div class="sh" @click=${()=>{this._showTotals=!this._showTotals}}>
+            <span class="st">📊 ${$e(e,"section.totals")}</span>
+            <ha-icon .icon=${this._showTotals?"mdi:chevron-up":"mdi:chevron-down"}></ha-icon>
+          </div>
+          ${this._showTotals?q`
+          <div class="tg">
+            <div class="ti" @click=${()=>this._more(this._e("total_power"))}><ha-icon icon="mdi:flash"></ha-icon><span class="tl">${$e(e,"total.active_power")}</span><span class="tv">${this._fmt(o)}W</span></div>
+            <div class="ti" @click=${()=>this._more(this._e("total_apparent"))}><ha-icon icon="mdi:lightning-bolt"></ha-icon><span class="tl">${$e(e,"total.apparent_power")}</span><span class="tv">${this._fmt(a)}VA</span></div>
+            <div class="ti" @click=${()=>this._more(this._e("total_current"))}><ha-icon icon="mdi:current-ac"></ha-icon><span class="tl">${$e(e,"total.current")}</span><span class="tv">${this._n("total_current").toFixed(2)}A</span></div>
+            <div class="ti"><ha-icon icon="mdi:cosine-wave"></ha-icon><span class="tl">${$e(e,"total.power_factor")}</span><span class="tv">${r.toFixed(2)}</span></div>
+            <div class="ti" @click=${()=>this._more(this._e("total_energy"))}><ha-icon icon="mdi:meter-electric"></ha-icon><span class="tl">${$e(e,"total.energy_in")}</span><span class="tv">${this._fmt(this._n("total_energy"))} kWh</span></div>
+            <div class="ti" @click=${()=>this._more(this._e("total_returned"))}><ha-icon icon="mdi:flash-outline"></ha-icon><span class="tl">${$e(e,"total.energy_out")}</span><span class="tv">${this._fmt(this._n("total_returned"))} kWh</span></div>
+            <div class="ti" @click=${()=>this._more(this._e("total_cost"))}><ha-icon icon="mdi:cash"></ha-icon><span class="tl">${$e(e,"total.cost")}</span><span class="tv">${this._n("total_cost").toFixed(2)} ${n}</span></div>
+          </div>`:I}`:I}
 
-          <!-- ENERGY DAILY -->
           ${!1!==this.config.show_energy&&(this._e("daily_consumed")||this._e("daily_return")||this._e("daily_grid"))?q`
-            <div class="section-header"><span class="section-title">📈 Energie zilnică</span></div>
-            <div class="energy-grid">
-              ${this._e("daily_consumed")?q`
-                <div class="ec consumed" @click=${()=>this._more(this._e("daily_consumed"))}>
-                  <ha-icon icon="mdi:counter"></ha-icon>
-                  <div class="ei"><span class="el">Consum casă</span><span class="ev">${a.toFixed(2)} kWh</span></div>
-                </div>`:B}
-              ${this._e("daily_grid")?q`
-                <div class="ec grid-in" @click=${()=>this._more(this._e("daily_grid"))}>
-                  <ha-icon icon="mdi:transmission-tower-import"></ha-icon>
-                  <div class="ei"><span class="el">Import rețea</span><span class="ev">${r.toFixed(2)} kWh</span></div>
-                </div>`:B}
-              ${this._e("daily_return")?q`
-                <div class="ec returned" @click=${()=>this._more(this._e("daily_return"))}>
-                  <ha-icon icon="mdi:solar-power"></ha-icon>
-                  <div class="ei"><span class="el">Export rețea</span><span class="ev">${n.toFixed(2)} kWh</span></div>
-                </div>`:B}
-              ${this._e("daily_hp")?q`
-                <div class="ec hp" @click=${()=>this._more(this._e("daily_hp"))}>
-                  <ha-icon icon="mdi:heat-pump"></ha-icon>
-                  <div class="ei"><span class="el">Pompă căldură</span><span class="ev">${c.toFixed(2)} kWh</span></div>
-                </div>`:B}
-            </div>
-          `:B}
+          <div class="sh"><span class="st">📈 ${$e(e,"section.daily")}</span></div>
+          <div class="eg">
+            ${this._e("daily_consumed")?q`<div class="ec consumed" @click=${()=>this._more(this._e("daily_consumed"))}><ha-icon icon="mdi:counter"></ha-icon><div class="ei"><span class="el">${$e(e,"daily.house")}</span><span class="ev">${this._n("daily_consumed").toFixed(2)} kWh</span></div></div>`:I}
+            ${this._e("daily_grid")?q`<div class="ec grid-in" @click=${()=>this._more(this._e("daily_grid"))}><ha-icon icon="mdi:transmission-tower-import"></ha-icon><div class="ei"><span class="el">${$e(e,"daily.grid_import")}</span><span class="ev">${l.toFixed(2)} kWh</span></div></div>`:I}
+            ${this._e("daily_return")?q`<div class="ec returned" @click=${()=>this._more(this._e("daily_return"))}><ha-icon icon="mdi:solar-power"></ha-icon><div class="ei"><span class="el">${$e(e,"daily.grid_export")}</span><span class="ev">${this._n("daily_return").toFixed(2)} kWh</span></div></div>`:I}
+            ${this._e("daily_hp")?q`<div class="ec hp" @click=${()=>this._more(this._e("daily_hp"))}><ha-icon icon="mdi:heat-pump"></ha-icon><div class="ei"><span class="el">${$e(e,"daily.heat_pump")}</span><span class="ev">${this._n("daily_hp").toFixed(2)} kWh</span></div></div>`:I}
+          </div>`:I}
 
-          <!-- COSTS -->
           ${!1!==this.config.show_costs&&this._e("daily_grid")?q`
-            <div class="section-header"><span class="section-title">💰 Costuri</span></div>
-            <div class="costs">
-              <div class="cost-row">
-                <ha-icon icon="mdi:cash"></ha-icon>
-                <span>Cost estimat azi (rețea)</span>
-                <span class="cost-val">${_.toFixed(2)} RON</span>
-              </div>
-              <div class="cost-row small">
-                <span></span>
-                <span class="cost-note">${r.toFixed(2)} kWh × ${p} RON/kWh</span>
-                ${d?q`<span class="cost-note">Total: ${d.toFixed(2)} RON</span>`:B}
-              </div>
-            </div>
-          `:B}
+          <div class="sh"><span class="st">💰 ${$e(e,"section.costs")}</span></div>
+          <div class="costs">
+            <div class="cr"><ha-icon icon="mdi:cash"></ha-icon><span>${$e(e,"cost.daily")}</span><span class="cv">${p.toFixed(2)} ${n}</span></div>
+            <div class="cr small"><span></span><span class="cn">${$e(e,"cost.rate",{kwh:l.toFixed(2),rate:`${c} ${n}`})}</span>
+              ${this._n("total_cost")?q`<span class="cn">${$e(e,"total.cost")}: ${this._n("total_cost").toFixed(2)} ${n}</span>`:I}</div>
+          </div>`:I}
 
-          <!-- DEVICE STATUS -->
           ${!1!==this.config.show_device?q`
-            <div class="section-header"><span class="section-title">📡 Device</span></div>
-            <div class="device-grid">
-              ${u?q`<div class="di"><ha-icon icon="mdi:thermometer"></ha-icon><span>${u}°C</span></div>`:B}
-              ${g?q`<div class="di ${g<-75?"weak":g<-60?"ok":"good"}"><ha-icon icon="mdi:wifi"></ha-icon><span>${g} dBm</span></div>`:B}
-              ${this._e("cloud")?q`<div class="di"><ha-icon icon=${v?"mdi:cloud-check":"mdi:cloud-off-outline"}></ha-icon><span>${v?"Cloud":"Local"}</span></div>`:B}
-              ${this._e("device_tracker")?q`<div class="di ${w?"good":"weak"}"><ha-icon icon=${w?"mdi:access-point-network":"mdi:access-point-off"}></ha-icon><span>${w?"Online":"Offline"}</span></div>`:B}
-              ${f?q`<div class="di"><ha-icon icon="mdi:clock-outline"></ha-icon><span>Uptime: ${this._fmtDate(f)}</span></div>`:B}
-              ${m?q`<div class="di warn"><ha-icon icon="mdi:alert"></ha-icon><span>Restart necesar</span></div>`:B}
-              ${x?q`<div class="di warn"><ha-icon icon="mdi:update"></ha-icon><span>Update disponibil</span></div>`:B}
-              ${y?q`<div class="di"><ha-icon icon="mdi:test-tube"></ha-icon><span>Beta update</span></div>`:B}
-            </div>
-          `:B}
+          <div class="sh"><span class="st">📡 ${$e(e,"section.device")}</span></div>
+          <div class="dg">
+            ${d?q`<div class="dv"><ha-icon icon="mdi:thermometer"></ha-icon><span>${d}°C</span></div>`:I}
+            ${h?q`<div class="dv ${h<-75?"weak":h<-60?"ok":"good"}"><ha-icon icon="mdi:wifi"></ha-icon><span>${h} dBm</span></div>`:I}
+            ${this._e("cloud")?q`<div class="dv"><ha-icon icon=${u?"mdi:cloud-check":"mdi:cloud-off-outline"}></ha-icon><span>${$e(e,u?"device.cloud":"device.local")}</span></div>`:I}
+            ${this._e("device_tracker")?q`<div class="dv ${m?"good":"weak"}"><ha-icon icon=${m?"mdi:access-point-network":"mdi:access-point-off"}></ha-icon><span>${$e(e,m?"device.online":"device.offline")}</span></div>`:I}
+            ${_?q`<div class="dv"><ha-icon icon="mdi:clock-outline"></ha-icon><span>${$e(e,"device.uptime")}: ${this._fmtDate(_)}</span></div>`:I}
+            ${g?q`<div class="dv warn"><ha-icon icon="mdi:alert"></ha-icon><span>${$e(e,"device.restart_needed")}</span></div>`:I}
+            ${f?q`<div class="dv warn"><ha-icon icon="mdi:update"></ha-icon><span>${$e(e,"device.update_avail")}</span></div>`:I}
+            ${v?q`<div class="dv"><ha-icon icon="mdi:test-tube"></ha-icon><span>${$e(e,"device.beta_update")}</span></div>`:I}
+          </div>`:I}
 
-          <!-- CONTROLS -->
           ${this.config.show_controls?q`
-            <div class="section-header"><span class="section-title">🎮 Control</span></div>
-            <div class="controls">
-              ${this._e("reboot")?q`
-                <div class="ctrl" @click=${()=>this._more(this._e("reboot"))}>
-                  <ha-icon icon="mdi:restart"></ha-icon><span>Reboot</span>
-                </div>`:B}
-              ${this._e("ble_integration")?q`
-                <div class="ctrl ${$?"on":""}" @click=${()=>this._more(this._e("ble_integration"))}>
-                  <ha-icon icon="mdi:bluetooth"></ha-icon><span>BLE: ${$?"ON":"OFF"}</span>
-                </div>`:B}
-              ${this._e("monitor_production")?q`
-                <div class="ctrl ${b?"on":""}" @click=${()=>this._more(this._e("monitor_production"))}>
-                  <ha-icon icon="mdi:script-text"></ha-icon><span>Monitor JS: ${b?"ON":"OFF"}</span>
-                </div>`:B}
-            </div>
-          `:B}
+          <div class="sh"><span class="st">🎮 ${$e(e,"section.control")}</span></div>
+          <div class="ct">
+            ${this._e("reboot")?q`<div class="ctrl" @click=${()=>this._more(this._e("reboot"))}><ha-icon icon="mdi:restart"></ha-icon><span>${$e(e,"ctrl.reboot")}</span></div>`:I}
+            ${this._e("ble_integration")?q`<div class="ctrl ${$?"on":""}" @click=${()=>this._more(this._e("ble_integration"))}><ha-icon icon="mdi:bluetooth"></ha-icon><span>${$e(e,"ctrl.ble")}: ${$e(e,$?"ctrl.on":"ctrl.off")}</span></div>`:I}
+            ${this._e("monitor_production")?q`<div class="ctrl ${y?"on":""}" @click=${()=>this._more(this._e("monitor_production"))}><ha-icon icon="mdi:script-text"></ha-icon><span>${$e(e,"ctrl.monitor")}: ${$e(e,y?"ctrl.on":"ctrl.off")}</span></div>`:I}
+          </div>`:I}
         </div>
 
-        <div class="footer">
-          <span>Update: ${this._changed("total_power")}</span>
-        </div>
-      </ha-card>
-    `}static get styles(){return r`
+        <div class="footer"><span>${$e(e,"footer.update")} ${this._changed("total_power")}</span></div>
+      </ha-card>`}static get styles(){return r`
       :host { display: block; }
       ha-card { border-radius: 16px; overflow: hidden; background: var(--card-background-color, #1c1c1e); }
-
       .header { display: flex; align-items: center; gap: 12px; padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
       .header.exporting { background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(234,179,8,0.06)); }
       .header.importing { background: linear-gradient(135deg, rgba(239,68,68,0.06), rgba(245,158,11,0.04)); }
@@ -236,16 +133,13 @@ function t(t,e,s,i){var o,a=arguments.length,r=a<3?e:null===i?i=Object.getOwnPro
       .header-text { flex: 1; }
       .header-title { font-size: 16px; font-weight: 600; color: var(--primary-text-color); }
       .header-sub { font-size: 12px; color: var(--secondary-text-color); margin-top: 2px; }
-      .power-badge { padding: 6px 14px; border-radius: 14px; font-size: 16px; font-weight: 700; letter-spacing: -0.5px; }
+      .power-badge { padding: 6px 14px; border-radius: 14px; font-size: 16px; font-weight: 700; }
       .power-badge.export { background: rgba(34,197,94,0.15); color: #22c55e; }
       .power-badge.import { background: rgba(239,68,68,0.12); color: #ef4444; }
       .content { padding: 14px; }
-
       .no-device { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 24px 16px; text-align: center; }
       .no-device ha-icon { --mdc-icon-size: 40px; color: var(--secondary-text-color); }
       .no-device p { margin: 0; font-size: 13px; color: var(--secondary-text-color); }
-
-      /* Flow */
       .flow { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; padding: 8px 0; }
       .flow-node { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 14px; border-radius: 14px; min-width: 76px; transition: all 0.3s; }
       .flow-node ha-icon { --mdc-icon-size: 26px; }
@@ -261,49 +155,41 @@ function t(t,e,s,i){var o,a=arguments.length,r=a<3?e:null===i?i=Object.getOwnPro
       .flow-node small { font-size: 11px; color: var(--secondary-text-color); }
       .flow-arrow { display: flex; align-items: center; }
       .arrow-line { display: flex; align-items: center; padding: 4px 6px; border-radius: 8px; opacity: 0.3; }
-      .arrow-line.export { color: #22c55e; opacity: 1; animation: flowPulse 2s infinite; }
-      .arrow-line.import { color: #ef4444; opacity: 1; animation: flowPulse 2s infinite; }
+      .arrow-line.export { color: #22c55e; opacity: 1; animation: fp 2s infinite; }
+      .arrow-line.import { color: #ef4444; opacity: 1; animation: fp 2s infinite; }
       .arrow-line.idle { color: var(--secondary-text-color); }
       .arrow-line ha-icon { --mdc-icon-size: 20px; }
-      @keyframes flowPulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
-
-      /* Section headers */
-      .section-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 4px; cursor: pointer; margin-bottom: 6px; }
-      .section-header:hover { opacity: 0.8; }
-      .section-title { font-size: 13px; font-weight: 600; color: var(--secondary-text-color); text-transform: uppercase; letter-spacing: 0.5px; }
-      .section-header ha-icon { --mdc-icon-size: 18px; color: var(--secondary-text-color); }
-
-      /* Phases */
+      @keyframes fp { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+      .sh { display: flex; align-items: center; justify-content: space-between; padding: 6px 4px; cursor: pointer; margin-bottom: 6px; }
+      .sh:hover { opacity: 0.8; }
+      .st { font-size: 13px; font-weight: 600; color: var(--secondary-text-color); text-transform: uppercase; letter-spacing: 0.5px; }
+      .sh ha-icon { --mdc-icon-size: 18px; color: var(--secondary-text-color); }
       .phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
-      .phase-card { padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; }
-      .phase-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); }
-      .phase-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-      .phase-label { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: rgba(59,130,246,0.15); color: #60a5fa; }
-      .phase-name { flex: 1; font-size: 11px; color: var(--secondary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .phase-power { font-size: 14px; font-weight: 700; white-space: nowrap; }
-      .phase-power.export { color: #22c55e; }
-      .phase-power.import { color: #ef4444; }
-      .phase-details { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); }
-      .pd { display: flex; align-items: center; gap: 4px; }
-      .pd ha-icon { --mdc-icon-size: 14px; color: var(--secondary-text-color); }
-      .pd span { font-size: 11px; color: var(--secondary-text-color); }
-      .phase-energy { display: flex; justify-content: space-between; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.04); }
+      .pc { padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s; }
+      .pc:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); }
+      .ph { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+      .pl { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: rgba(59,130,246,0.15); color: #60a5fa; }
+      .pn { flex: 1; font-size: 11px; color: var(--secondary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .pp { font-size: 14px; font-weight: 700; white-space: nowrap; }
+      .pp.export { color: #22c55e; }
+      .pp.import { color: #ef4444; }
+      .pd { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); }
+      .di { display: flex; align-items: center; gap: 4px; }
+      .di ha-icon { --mdc-icon-size: 14px; color: var(--secondary-text-color); }
+      .di span { font-size: 11px; color: var(--secondary-text-color); }
+      .pe { display: flex; justify-content: space-between; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.04); }
       .ein, .eout { display: flex; align-items: center; gap: 3px; font-size: 10px; color: var(--secondary-text-color); }
-      .phase-energy ha-icon { --mdc-icon-size: 12px; }
+      .pe ha-icon { --mdc-icon-size: 12px; }
       .ein ha-icon { color: #ef4444; }
       .eout ha-icon { color: #22c55e; }
-
-      /* Totals */
-      .totals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px; }
-      .total-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); cursor: pointer; }
-      .total-item:hover { background: rgba(255,255,255,0.05); }
-      .total-item ha-icon { --mdc-icon-size: 16px; color: var(--secondary-text-color); flex-shrink: 0; }
+      .tg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px; }
+      .ti { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); cursor: pointer; }
+      .ti:hover { background: rgba(255,255,255,0.05); }
+      .ti ha-icon { --mdc-icon-size: 16px; color: var(--secondary-text-color); flex-shrink: 0; }
       .tl { flex: 1; font-size: 11px; color: var(--secondary-text-color); }
       .tv { font-size: 13px; font-weight: 600; color: var(--primary-text-color); }
-
-      /* Energy */
-      .energy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-      .ec { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+      .eg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+      .ec { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; cursor: pointer; }
       .ec:hover { opacity: 0.85; }
       .ec.consumed { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.1); }
       .ec.consumed ha-icon { color: #ef4444; }
@@ -317,89 +203,88 @@ function t(t,e,s,i){var o,a=arguments.length,r=a<3?e:null===i?i=Object.getOwnPro
       .ei { display: flex; flex-direction: column; }
       .el { font-size: 11px; color: var(--secondary-text-color); }
       .ev { font-size: 14px; font-weight: 700; color: var(--primary-text-color); }
-
-      /* Costs */
       .costs { padding: 10px 14px; border-radius: 10px; background: rgba(34,197,94,0.05); border: 1px solid rgba(34,197,94,0.1); margin-bottom: 14px; cursor: pointer; }
       .costs:hover { background: rgba(34,197,94,0.08); }
-      .cost-row { display: flex; align-items: center; gap: 8px; }
-      .cost-row ha-icon { --mdc-icon-size: 18px; color: #22c55e; }
-      .cost-row span:first-of-type { flex: 1; font-size: 13px; color: var(--secondary-text-color); }
-      .cost-val { font-size: 16px; font-weight: 700; color: #22c55e; }
-      .cost-row.small { margin-top: 4px; }
-      .cost-row.small ha-icon { display: none; }
-      .cost-note { font-size: 11px; color: var(--secondary-text-color); }
-
-      /* Device */
-      .device-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-      .di { display: flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 8px; background: rgba(255,255,255,0.03); }
-      .di ha-icon { --mdc-icon-size: 14px; color: var(--secondary-text-color); }
-      .di span { font-size: 11px; color: var(--secondary-text-color); }
-      .di.good ha-icon { color: #22c55e; }
-      .di.ok ha-icon { color: #f59e0b; }
-      .di.weak ha-icon { color: #ef4444; }
-      .di.warn { background: rgba(245,158,11,0.08); }
-      .di.warn ha-icon { color: #f59e0b; }
-      .di.warn span { color: #f59e0b; }
-
-      /* Controls */
-      .controls { display: flex; gap: 8px; margin-bottom: 14px; }
-      .ctrl { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); cursor: pointer; transition: all 0.2s; }
+      .cr { display: flex; align-items: center; gap: 8px; }
+      .cr ha-icon { --mdc-icon-size: 18px; color: #22c55e; }
+      .cr span:first-of-type { flex: 1; font-size: 13px; color: var(--secondary-text-color); }
+      .cv { font-size: 16px; font-weight: 700; color: #22c55e; }
+      .cr.small { margin-top: 4px; }
+      .cr.small ha-icon { display: none; }
+      .cn { font-size: 11px; color: var(--secondary-text-color); }
+      .dg { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+      .dv { display: flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 8px; background: rgba(255,255,255,0.03); }
+      .dv ha-icon { --mdc-icon-size: 14px; color: var(--secondary-text-color); }
+      .dv span { font-size: 11px; color: var(--secondary-text-color); }
+      .dv.good ha-icon { color: #22c55e; }
+      .dv.ok ha-icon { color: #f59e0b; }
+      .dv.weak ha-icon { color: #ef4444; }
+      .dv.warn { background: rgba(245,158,11,0.08); }
+      .dv.warn ha-icon { color: #f59e0b; }
+      .dv.warn span { color: #f59e0b; }
+      .ct { display: flex; gap: 8px; margin-bottom: 14px; }
+      .ctrl { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); cursor: pointer; }
       .ctrl:hover { background: rgba(255,255,255,0.08); }
       .ctrl.on { border-color: rgba(34,197,94,0.3); }
       .ctrl ha-icon { --mdc-icon-size: 18px; color: var(--secondary-text-color); }
       .ctrl span { font-size: 12px; color: var(--secondary-text-color); }
-
       .footer { display: flex; justify-content: flex-end; padding: 8px 16px; border-top: 1px solid rgba(255,255,255,0.04); font-size: 11px; color: var(--secondary-text-color); }
-
-      @media (max-width: 420px) {
-        .phases { grid-template-columns: 1fr; }
-        .energy-grid, .totals-grid { grid-template-columns: 1fr; }
-        .flow { flex-wrap: wrap; }
-      }
-    `}};t([pt({attribute:!1})],Et.prototype,"hass",void 0),t([pt({attribute:!1})],Et.prototype,"config",void 0),t([_t()],Et.prototype,"_showPhaseDetails",void 0),t([_t()],Et.prototype,"_showTotals",void 0),Et=t([lt(vt)],Et);let St=class extends nt{constructor(){super(...arguments),this._section="general"}setConfig(t){this._config={...t}}_u(t,e){this._config={...this._config,[t]:e},ft(this,"config-changed",{config:this._config})}_ue(t,e){const s={...this._config.entities||{}};e?s[t]=e:delete s[t],this._u("entities",s)}_ul(t,e){const s={...this._config.phase_labels||{}};s[t]=e,this._u("phase_labels",s)}_getDeviceHint(){if(!this.hass)return"";const t=Object.keys(this.hass.states).find(t=>t.startsWith("sensor.")&&t.endsWith("_phase_a_active_power"));return t?t.replace("sensor.","").replace("_phase_a_active_power",""):""}render(){if(!this.hass||!this._config)return B;const t=this._getDeviceHint(),e=this._config.entities||{};return q`
-      <div class="tabs">${[{k:"general",l:"General",i:"mdi:cog"},{k:"phases",l:"Faze",i:"mdi:flash"},{k:"totals",l:"Totaluri",i:"mdi:counter"},{k:"energy",l:"Energie",i:"mdi:solar-power"},{k:"device",l:"Device",i:"mdi:chip"}].map(t=>q`
-        <div class="tab ${this._section===t.k?"active":""}" @click=${()=>{this._section=t.k}}>
-          <ha-icon .icon=${t.i}></ha-icon><span>${t.l}</span>
+      @media (max-width: 420px) { .phases { grid-template-columns: 1fr; } .eg, .tg { grid-template-columns: 1fr; } .flow { flex-wrap: wrap; } }
+    `}};e([he({attribute:!1})],Se.prototype,"hass",void 0),e([he({attribute:!1})],Se.prototype,"config",void 0),e([_e()],Se.prototype,"_showPhaseDetails",void 0),e([_e()],Se.prototype,"_showTotals",void 0),Se=e([le(ye)],Se);const Ce=Object.keys(ve).map(e=>({code:e,name:{en:"English",ro:"Română",de:"Deutsch",fr:"Français",es:"Español",it:"Italiano",pl:"Polski",hu:"Magyar"}[e]||e}));let Pe=class extends ne{constructor(){super(...arguments),this._section="general"}setConfig(e){this._config={...e}}_u(e,t){this._config={...this._config,[e]:t},fe(this,"config-changed",{config:this._config})}_ue(e,t){const o={...this._config.entities||{}};t?o[e]=t:delete o[e],this._u("entities",o)}_ul(e,t){const o={...this._config.phase_labels||{}};o[e]=t,this._u("phase_labels",o)}_hint(){if(!this.hass)return"";const e=Object.keys(this.hass.states).find(e=>e.startsWith("sensor.")&&e.endsWith("_phase_a_active_power"));return e?e.replace("sensor.","").replace("_phase_a_active_power",""):""}render(){if(!this.hass||!this._config)return I;const e=this._hint(),t=this._config.entities||{},o=me(this.hass,this._config.language),s=[{k:"general",l:"General",i:"mdi:cog"},{k:"phases",l:$e(o,"section.phases"),i:"mdi:flash"},{k:"totals",l:$e(o,"section.totals"),i:"mdi:counter"},{k:"energy",l:$e(o,"section.daily"),i:"mdi:solar-power"},{k:"device",l:$e(o,"section.device"),i:"mdi:chip"}];return q`
+      <div class="tabs">${s.map(e=>q`
+        <div class="tab ${this._section===e.k?"active":""}" @click=${()=>{this._section=e.k}}>
+          <ha-icon .icon=${e.i}></ha-icon><span>${e.l}</span>
         </div>`)}</div>
 
-      ${t?q`<div class="hint ok"><ha-icon icon="mdi:magnify"></ha-icon><span>Device detectat: <strong>${t}</strong></span></div>`:q`<div class="hint warn"><ha-icon icon="mdi:alert"></ha-icon><span>Nu s-a detectat un Shelly Pro 3EM. Completează manual.</span></div>`}
+      ${e?q`<div class="hint ok"><ha-icon icon="mdi:magnify"></ha-icon><span>Device: <strong>${e}</strong></span></div>`:q`<div class="hint warn"><ha-icon icon="mdi:alert"></ha-icon><span>No Shelly Pro 3EM detected. Fill entities manually.</span></div>`}
 
       <div class="cfg">
         ${"general"===this._section?q`
-          <ha-textfield label="Titlu" .value=${this._config.title||""} @input=${t=>this._u("title",t.target.value)}></ha-textfield>
-          ${[["show_header","Header"],["show_flow","Flow Diagram"],["show_phases","Faze"],["show_totals","Totaluri detaliate"],["show_energy","Energie zilnică"],["show_costs","Costuri"],["show_device","Device Info"],["show_controls","Control (reboot, BLE)"]].map(([t,e])=>q`
-            <div class="row"><ha-switch .checked=${!1!==this._config[t]&&"show_controls"!==t||!!this._config[t]} @change=${e=>this._u(t,e.target.checked)}></ha-switch><span>${e}</span></div>
+          <ha-textfield label="Title" .value=${this._config.title||""} @input=${e=>this._u("title",e.target.value)}></ha-textfield>
+
+          <div class="sf">
+            <span class="sl">Language</span>
+            <select @change=${e=>this._u("language",e.target.value)}>
+              <option value="">Auto (${o})</option>
+              ${Ce.map(e=>q`<option value=${e.code} .selected=${this._config.language===e.code}>${e.name}</option>`)}
+            </select>
+          </div>
+
+          ${[["show_header","Header"],["show_flow","Flow Diagram"],["show_phases",$e(o,"section.phases")],["show_totals",$e(o,"section.totals")],["show_energy",$e(o,"section.daily")],["show_costs",$e(o,"section.costs")],["show_device",$e(o,"section.device")],["show_controls",$e(o,"section.control")]].map(([e,t])=>q`
+            <div class="row"><ha-switch .checked=${"show_controls"===e?!!this._config[e]:!1!==this._config[e]} @change=${t=>this._u(e,t.target.checked)}></ha-switch><span>${t}</span></div>
           `)}
-          <ha-textfield label="Cost kWh (RON)" type="number" .value=${String(this._config.cost_per_kwh||.85)} @input=${t=>this._u("cost_per_kwh",parseFloat(t.target.value))}></ha-textfield>
-        `:B}
+
+          <ha-textfield label="Cost per kWh" type="number" .value=${String(this._config.cost_per_kwh||.85)} @input=${e=>this._u("cost_per_kwh",parseFloat(e.target.value))}></ha-textfield>
+          <ha-textfield label="Currency" .value=${this._config.cost_currency||"RON"} @input=${e=>this._u("cost_currency",e.target.value)}></ha-textfield>
+        `:I}
 
         ${"phases"===this._section?q`
-          <div class="st">Etichete faze</div>
-          ${["A","B","C"].map(t=>q`<ha-textfield label="Faza ${t}" .value=${(this._config.phase_labels||{})[t]||""} @input=${e=>this._ul(t,e.target.value)}></ha-textfield>`)}
-          <div class="st">Entități per fază <span class="h">(lasă gol = auto)</span></div>
-          ${["a","b","c"].flatMap(t=>[`phase_${t}_power`,`phase_${t}_apparent`,`phase_${t}_voltage`,`phase_${t}_current`,`phase_${t}_pf`,`phase_${t}_freq`,`phase_${t}_energy`,`phase_${t}_returned`]).map(t=>q`<ha-textfield label=${t} .value=${e[t]||""} placeholder="auto" @input=${e=>this._ue(t,e.target.value)}></ha-textfield>`)}
-        `:B}
+          <div class="st">${$e(o,"section.phases")} labels</div>
+          ${["A","B","C"].map(e=>q`<ha-textfield label="Phase ${e}" .value=${(this._config.phase_labels||{})[e]||""} @input=${t=>this._ul(e,t.target.value)}></ha-textfield>`)}
+          <div class="st">Entities <span class="h">(leave empty = auto-discovery)</span></div>
+          ${["a","b","c"].flatMap(e=>[`phase_${e}_power`,`phase_${e}_apparent`,`phase_${e}_voltage`,`phase_${e}_current`,`phase_${e}_pf`,`phase_${e}_freq`,`phase_${e}_energy`,`phase_${e}_returned`]).map(e=>q`<ha-textfield label=${e} .value=${t[e]||""} placeholder="auto" @input=${t=>this._ue(e,t.target.value)}></ha-textfield>`)}
+        `:I}
 
         ${"totals"===this._section?q`
-          <div class="st">Totaluri Shelly</div>
-          ${["total_power","total_apparent","total_current","total_energy","total_returned","total_cost"].map(t=>q`
-            <ha-textfield label=${t} .value=${e[t]||""} placeholder="auto" @input=${e=>this._ue(t,e.target.value)}></ha-textfield>`)}
-        `:B}
+          <div class="st">${$e(o,"section.totals")}</div>
+          ${["total_power","total_apparent","total_current","total_energy","total_returned","total_cost"].map(e=>q`
+            <ha-textfield label=${e} .value=${t[e]||""} placeholder="auto" @input=${t=>this._ue(e,t.target.value)}></ha-textfield>`)}
+        `:I}
 
         ${"energy"===this._section?q`
-          <div class="st">Contoare zilnice <span class="h">(helper entities)</span></div>
-          ${["daily_consumed","daily_grid","daily_return","daily_hp"].map(t=>q`
-            <ha-textfield label=${t} .value=${e[t]||""} placeholder="opțional" @input=${e=>this._ue(t,e.target.value)}></ha-textfield>`)}
-        `:B}
+          <div class="st">${$e(o,"section.daily")} <span class="h">(helper entities)</span></div>
+          ${["daily_consumed","daily_grid","daily_return","daily_hp"].map(e=>q`
+            <ha-textfield label=${e} .value=${t[e]||""} placeholder="optional" @input=${t=>this._ue(e,t.target.value)}></ha-textfield>`)}
+        `:I}
 
         ${"device"===this._section?q`
-          <div class="st">Device Info <span class="h">(auto)</span></div>
-          ${["temperature","rssi","uptime","cloud","restart_required","firmware","beta_firmware","device_tracker"].map(t=>q`
-            <ha-textfield label=${t} .value=${e[t]||""} placeholder="auto" @input=${e=>this._ue(t,e.target.value)}></ha-textfield>`)}
-          <div class="st">Control <span class="h">(auto)</span></div>
-          ${["reboot","ble_integration","monitor_production"].map(t=>q`
-            <ha-textfield label=${t} .value=${e[t]||""} placeholder="auto" @input=${e=>this._ue(t,e.target.value)}></ha-textfield>`)}
-        `:B}
+          <div class="st">${$e(o,"section.device")} <span class="h">(auto)</span></div>
+          ${["temperature","rssi","uptime","cloud","restart_required","firmware","beta_firmware","device_tracker"].map(e=>q`
+            <ha-textfield label=${e} .value=${t[e]||""} placeholder="auto" @input=${t=>this._ue(e,t.target.value)}></ha-textfield>`)}
+          <div class="st">${$e(o,"section.control")} <span class="h">(auto)</span></div>
+          ${["reboot","ble_integration","monitor_production"].map(e=>q`
+            <ha-textfield label=${e} .value=${t[e]||""} placeholder="auto" @input=${t=>this._ue(e,t.target.value)}></ha-textfield>`)}
+        `:I}
       </div>
     `}static get styles(){return r`
     .tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; flex-wrap: wrap; }
@@ -417,4 +302,8 @@ function t(t,e,s,i){var o,a=arguments.length,r=a<3?e:null===i?i=Object.getOwnPro
     .hint.ok { background: rgba(34,197,94,0.08); color: #22c55e; }
     .hint.warn { background: rgba(245,158,11,0.08); color: #f59e0b; }
     .hint ha-icon { --mdc-icon-size: 16px; flex-shrink: 0; }
-  `}};t([pt({attribute:!1})],St.prototype,"hass",void 0),t([pt({attribute:!1})],St.prototype,"config",void 0),t([_t()],St.prototype,"_config",void 0),t([_t()],St.prototype,"_section",void 0),St=t([lt("ha-shelly-smart-meter-editor")],St);var Ct=Object.freeze({__proto__:null,get ShellySmartMeterEditor(){return St}});export{Et as ShellySmartMeterCard};
+    .sf { display: flex; align-items: center; gap: 12px; }
+    .sl { font-size: 14px; color: var(--primary-text-color); min-width: 80px; }
+    select { flex: 1; padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--primary-text-color); font-size: 14px; }
+    select option { background: #1c1c1e; color: #fff; }
+  `}};e([he({attribute:!1})],Pe.prototype,"hass",void 0),e([he({attribute:!1})],Pe.prototype,"config",void 0),e([_e()],Pe.prototype,"_config",void 0),e([_e()],Pe.prototype,"_section",void 0),Pe=e([le("ha-shelly-smart-meter-editor")],Pe);var Me=Object.freeze({__proto__:null,get ShellySmartMeterEditor(){return Pe}});export{Se as ShellySmartMeterCard};
