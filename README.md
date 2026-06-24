@@ -10,13 +10,34 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-2.0.0-amber?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/version-3.0.0-amber?style=flat-square" alt="Version">
   <img src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square" alt="HACS">
   <img src="https://img.shields.io/badge/HA-2024.1+-blue?style=flat-square" alt="HA">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License">
 </p>
 
 ---
+
+## 🌍 Multi-Language
+
+The card automatically detects your Home Assistant language. Supported languages:
+
+| Language | Code | Auto-detect |
+|----------|------|-------------|
+| 🇬🇧 English | `en` | ✅ |
+| 🇷🇴 Română | `ro` | ✅ |
+| 🇩🇪 Deutsch | `de` | ✅ |
+| 🇫🇷 Français | `fr` | ✅ |
+| 🇪🇸 Español | `es` | ✅ |
+| 🇮🇹 Italiano | `it` | ✅ |
+| 🇵🇱 Polski | `pl` | ✅ |
+| 🇭🇺 Magyar | `hu` | ✅ |
+
+Override in config:
+```yaml
+type: custom:ha-shelly-smart-meter-card
+language: ro  # force Romanian
+```
 
 ## 🔍 Auto-Discovery
 
@@ -64,12 +85,13 @@ Have multiple? Specify entities manually in the config.
 ```yaml
 type: custom:ha-shelly-smart-meter-card
 ```
-Zero config — automatically finds your Shelly Pro 3EM!
+Zero config — automatically finds your Shelly Pro 3EM and uses your HA language!
 
 ### Full
 ```yaml
 type: custom:ha-shelly-smart-meter-card
 title: "⚡ Smart Meter Solar"
+language: en  # or ro, de, fr, es, it, pl, hu — auto-detected if omitted
 show_header: true
 show_flow: true
 show_phases: true
