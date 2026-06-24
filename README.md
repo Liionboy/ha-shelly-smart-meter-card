@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-amber?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/version-2.0.0-amber?style=flat-square" alt="Version">
   <img src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square" alt="HACS">
   <img src="https://img.shields.io/badge/HA-2024.1+-blue?style=flat-square" alt="HA">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License">
@@ -29,19 +29,22 @@ Ai mai multe? Specifică entity-urile manual în config.
 | Feature | Description |
 |---------|------------|
 | ⚡ **Energy Flow** | Animated diagram: Solar → House → Grid with live power values |
-| 🔌 **3-Phase Monitor** | Per-phase voltage, current, power, power factor, frequency |
-| 📊 **Energy Counters** | Daily consumed/returned + lifetime totals |
-| 💰 **Cost Tracking** | Daily cost estimation in RON (configurable rate) |
-| 📡 **Device Status** | Temperature, WiFi RSSI, cloud/local connectivity |
-| 🏷️ **Phase Labels** | Custom names (Casa, Pompă Căldură, Plită) |
-| 🎨 **Visual Editor** | Tabbed config UI — no YAML needed |
+| 🔌 **3-Phase Monitor** | Per-phase: voltage, current, active power (W), apparent power (VA), power factor, frequency |
+| 📊 **Totals** | Expandable: active/apparent power, current, PF, energy in/out, cost total |
+| 📈 **Daily Energy** | Grid import, grid export, house consumption, heat pump consumption |
+| 💰 **Cost Tracking** | Daily cost estimation in RON (configurable rate) + total cost |
+| 📡 **Device Status** | Temperature, WiFi RSSI, uptime, cloud/local, restart required, firmware updates |
+| 🎮 **Controls** | Reboot button, BLE integration switch, monitor-production.js switch |
+| 🏷️ **Phase Labels** | Custom names per phase (default: Faza A, B, C) |
+| 🎨 **Visual Editor** | 5-tab config UI (General, Faze, Totaluri, Energie, Device) |
 | 📱 **Responsive** | Adapts to mobile & desktop |
+| 🔍 **Auto-Discovery** | Finds any Shelly Pro 3EM automatically by entity pattern |
 
 ## 📦 Installation via HACS
 
 ### Custom Repository
 1. Go to **HACS → Integrations → ⋮ → Custom repositories**
-2. Add URL: `https://github.com/ADRIAN_USER/ha-shelly-smart-meter-card`
+2. Add URL: `https://github.com/Liionboy/ha-shelly-smart-meter-card`
 3. Category: **Frontend**
 4. Click **Install**
 5. Refresh browser cache
@@ -61,7 +64,7 @@ Ai mai multe? Specifică entity-urile manual în config.
 ```yaml
 type: custom:ha-shelly-smart-meter-card
 ```
-Fără nicio setare — găsește automat Shelly Pro 3EM!
+Zero config — găsește automat Shelly Pro 3EM!
 
 ### Full
 ```yaml
@@ -70,63 +73,84 @@ title: "⚡ Smart Meter Solar"
 show_header: true
 show_flow: true
 show_phases: true
+show_totals: true
 show_energy: true
 show_costs: true
 show_device: true
+show_controls: true
 cost_per_kwh: 0.85
 phase_labels:
   A: Casa
   B: Pompă Căldură
   C: Plită
 entities:
-  phase_a_power: sensor.smartmetersolar_phase_a_active_power
-  phase_a_voltage: sensor.smartmetersolar_phase_a_voltage
-  phase_a_current: sensor.smartmetersolar_phase_a_current
-  phase_a_pf: sensor.smartmetersolar_phase_a_power_factor
-  phase_a_freq: sensor.smartmetersolar_phase_a_frequency
-  phase_a_energy: sensor.smartmetersolar_phase_a_total_active_energy
-  phase_a_returned: sensor.smartmetersolar_phase_a_total_active_returned_energy
+  # Phase A (per-phase sensors)
+  phase_a_power: sensor.xxx_phase_a_active_power
+  phase_a_apparent: sensor.xxx_phase_a_apparent_power
+  phase_a_voltage: sensor.xxx_phase_a_voltage
+  phase_a_current: sensor.xxx_phase_a_current
+  phase_a_pf: sensor.xxx_phase_a_power_factor
+  phase_a_freq: sensor.xxx_phase_a_frequency
+  phase_a_energy: sensor.xxx_phase_a_total_active_energy
+  phase_a_returned: sensor.xxx_phase_a_total_active_returned_energy
   # Same for phase_b_*, phase_c_*
-  total_power: sensor.smartmetersolar_total_active_power
-  total_apparent: sensor.smartmetersolar_total_apparent_power
-  total_current: sensor.smartmetersolar_total_current
-  total_energy: sensor.smartmetersolar_total_active_energy
-  total_returned: sensor.smartmetersolar_total_active_returned_energy
+
+  # Totals
+  total_power: sensor.xxx_total_active_power
+  total_apparent: sensor.xxx_total_apparent_power
+  total_current: sensor.xxx_total_current
+  total_energy: sensor.xxx_total_active_energy
+  total_returned: sensor.xxx_total_active_returned_energy
+  total_cost: sensor.xxx_total_active_energy_cost
+
+  # Daily (helper entities — manual config required)
   daily_consumed: sensor.consum_zilnic_energy_casa
   daily_grid: sensor.consum_zilnic_grid
   daily_return: sensor.shelly_daily_return_grid
-  total_cost: sensor.smartmetersolar_total_active_energy_cost
-  temperature: sensor.smartmetersolar_temperature
-  rssi: sensor.smartmetersolar_rssi
-  uptime: sensor.smartmetersolar_uptime
-  cloud: binary_sensor.smartmetersolar_cloud
-  firmware: update.smartmetersolar_firmware_update
+  daily_hp: sensor.consum_zilnic_pompa_caldura
+
+  # Device (auto-discovered)
+  temperature: sensor.xxx_temperature
+  rssi: sensor.xxx_rssi
+  uptime: sensor.xxx_uptime
+  cloud: binary_sensor.xxx_cloud
+  restart_required: binary_sensor.xxx_restart_required
+  firmware: update.xxx_firmware_update
+  beta_firmware: update.xxx_beta_firmware_update
+  device_tracker: device_tracker.xxx
+
+  # Controls (auto-discovered)
+  reboot: button.xxx_reboot
+  ble_integration: switch.xxx_aioshelly_ble_integration
+  monitor_production: switch.xxx_monitor_production_js
 ```
 
-## 🏷️ Entity Resolution
+## 🏷️ Entity Resolution Order
 
-Card-ul rezolvă entitățile în ordine:
-1. **Config manual** — dacă specifici `entities.xxx` în YAML
-2. **Auto-discovery** — caută automat `sensor.*_phase_a_active_power` în HA
-3. **Gol** — secțiunea nu se afișează
+1. **Manual config** — `entities.xxx` in YAML
+2. **Auto-discovery** — searches for `sensor.*_phase_a_active_power` pattern
+3. **Empty** — section hidden if no entity found
 
-### Entități auto-discoverable
-| Key | Pattern |
-|-----|--------|
-| `phase_a_power` | `sensor.{device}_phase_a_active_power` |
-| `phase_a_voltage` | `sensor.{device}_phase_a_voltage` |
-| `phase_a_current` | `sensor.{device}_phase_a_current` |
-| `total_power` | `sensor.{device}_total_active_power` |
-| `temperature` | `sensor.{device}_temperature` |
-| `rssi` | `sensor.{device}_rssi` |
+### Auto-discovered entities (38 total)
 
-### Entități opționale (necesită config manual)
-| Key | Descriere |
-|-----|----------|
-| `daily_consumed` | Helper utility_meter consum zilnic |
-| `daily_grid` | Helper utility_meter consum grid |
-| `daily_return` | Helper utility_meter return grid |
-| `total_cost` | Sensor cost total |
+| Section | Keys |
+|---------|------|
+| **Per Phase (×3)** | `phase_{a,b,c}_power`, `_apparent`, `_voltage`, `_current`, `_pf`, `_freq`, `_energy`, `_returned` |
+| **Totals** | `total_power`, `total_apparent`, `total_current`, `total_energy`, `total_returned`, `total_cost` |
+| **Device** | `temperature`, `rssi`, `uptime`, `cloud`, `restart_required` |
+| **Updates** | `firmware`, `beta_firmware` |
+| **Switches** | `ble_integration`, `monitor_production` |
+| **Buttons** | `reboot` |
+| **Tracker** | `device_tracker` |
+
+### Manual config required (helpers)
+
+| Key | Description |
+|-----|-------------|
+| `daily_consumed` | Utility meter — daily house consumption |
+| `daily_grid` | Utility meter — daily grid import |
+| `daily_return` | Utility meter — daily grid export |
+| `daily_hp` | Utility meter — daily heat pump consumption |
 
 ## 📸 Screenshots
 
@@ -135,7 +159,7 @@ _Add screenshot here_
 ## 🛠️ Development
 
 ```bash
-git clone https://github.com/ADRIAN_USER/ha-shelly-smart-meter-card.git
+git clone https://github.com/Liionboy/ha-shelly-smart-meter-card.git
 cd ha-shelly-smart-meter-card
 npm install
 npm run build
