@@ -5,7 +5,7 @@
 <h1 align="center">⚡ Shelly Smart Meter Card</h1>
 
 <p align="center">
-  Custom Home Assistant card for <strong>Shelly Pro 3EM</strong> (SmartMeterSolar)<br>
+  Custom Home Assistant card for <strong>Shelly Pro 3EM</strong><br>
   3-phase energy monitoring with solar flow visualization
 </p>
 
@@ -20,9 +20,9 @@
 
 ## 🔍 Auto-Discovery
 
-Card-ul **detectează automat** orice Shelly Pro 3EM integrat în Home Assistant — indiferent de numele device-ului! Nu trebuie să configurezi nimic dacă ai un singur Shelly Pro 3EM.
+The card **automatically detects** any Shelly Pro 3EM integrated in Home Assistant — regardless of the device name! No configuration needed if you have a single Shelly Pro 3EM.
 
-Ai mai multe? Specifică entity-urile manual în config.
+Have multiple? Specify entities manually in the config.
 
 ## ✨ Features
 
@@ -30,19 +30,19 @@ Ai mai multe? Specifică entity-urile manual în config.
 |---------|------------|
 | ⚡ **Energy Flow** | Animated diagram: Solar → House → Grid with live power values |
 | 🔌 **3-Phase Monitor** | Per-phase: voltage, current, active power (W), apparent power (VA), power factor, frequency |
-| 📊 **Totals** | Expandable: active/apparent power, current, PF, energy in/out, cost total |
+| 📊 **Totals** | Expandable: active/apparent power, current, PF, energy in/out, total cost |
 | 📈 **Daily Energy** | Grid import, grid export, house consumption, heat pump consumption |
-| 💰 **Cost Tracking** | Daily cost estimation in RON (configurable rate) + total cost |
+| 💰 **Cost Tracking** | Daily cost estimation (configurable rate) + lifetime total cost |
 | 📡 **Device Status** | Temperature, WiFi RSSI, uptime, cloud/local, restart required, firmware updates |
 | 🎮 **Controls** | Reboot button, BLE integration switch, monitor-production.js switch |
-| 🏷️ **Phase Labels** | Custom names per phase (default: Faza A, B, C) |
-| 🎨 **Visual Editor** | 5-tab config UI (General, Faze, Totaluri, Energie, Device) |
+| 🏷️ **Phase Labels** | Custom names per phase |
+| 🎨 **Visual Editor** | 5-tab config UI (General, Phases, Totals, Energy, Device) |
 | 📱 **Responsive** | Adapts to mobile & desktop |
 | 🔍 **Auto-Discovery** | Finds any Shelly Pro 3EM automatically by entity pattern |
 
-## 📦 Installation via HACS
+## 📦 Installation
 
-### Custom Repository
+### HACS (Custom Repository)
 1. Go to **HACS → Integrations → ⋮ → Custom repositories**
 2. Add URL: `https://github.com/Liionboy/ha-shelly-smart-meter-card`
 3. Category: **Frontend**
@@ -64,7 +64,7 @@ Ai mai multe? Specifică entity-urile manual în config.
 ```yaml
 type: custom:ha-shelly-smart-meter-card
 ```
-Zero config — găsește automat Shelly Pro 3EM!
+Zero config — automatically finds your Shelly Pro 3EM!
 
 ### Full
 ```yaml
@@ -80,9 +80,9 @@ show_device: true
 show_controls: true
 cost_per_kwh: 0.85
 phase_labels:
-  A: Casa
-  B: Pompă Căldură
-  C: Plită
+  A: House
+  B: Heat Pump
+  C: Stove
 entities:
   # Phase A (per-phase sensors)
   phase_a_power: sensor.xxx_phase_a_active_power
@@ -93,7 +93,7 @@ entities:
   phase_a_freq: sensor.xxx_phase_a_frequency
   phase_a_energy: sensor.xxx_phase_a_total_active_energy
   phase_a_returned: sensor.xxx_phase_a_total_active_returned_energy
-  # Same for phase_b_*, phase_c_*
+  # Same pattern for phase_b_*, phase_c_*
 
   # Totals
   total_power: sensor.xxx_total_active_power
@@ -104,10 +104,10 @@ entities:
   total_cost: sensor.xxx_total_active_energy_cost
 
   # Daily (helper entities — manual config required)
-  daily_consumed: sensor.consum_zilnic_energy_casa
-  daily_grid: sensor.consum_zilnic_grid
-  daily_return: sensor.shelly_daily_return_grid
-  daily_hp: sensor.consum_zilnic_pompa_caldura
+  daily_consumed: sensor.daily_house_consumption
+  daily_grid: sensor.daily_grid_import
+  daily_return: sensor.daily_grid_export
+  daily_hp: sensor.daily_heat_pump
 
   # Device (auto-discovered)
   temperature: sensor.xxx_temperature
@@ -125,11 +125,12 @@ entities:
   monitor_production: switch.xxx_monitor_production_js
 ```
 
-## 🏷️ Entity Resolution Order
+## 🏷️ Entity Resolution
 
+Entities are resolved in this order:
 1. **Manual config** — `entities.xxx` in YAML
 2. **Auto-discovery** — searches for `sensor.*_phase_a_active_power` pattern
-3. **Empty** — section hidden if no entity found
+3. **Empty** — section is hidden if no entity found
 
 ### Auto-discovered entities (38 total)
 
@@ -143,7 +144,7 @@ entities:
 | **Buttons** | `reboot` |
 | **Tracker** | `device_tracker` |
 
-### Manual config required (helpers)
+### Manual config required (helper entities)
 
 | Key | Description |
 |-----|-------------|
