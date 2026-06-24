@@ -3,8 +3,9 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { HomeAssistant, LovelaceCardEditor, fireEvent } from 'custom-card-helpers';
 
 const CARD = 'ha-shelly-smart-meter-card';
+const VERSION = '1.1.0';
 console.info(
-  `%c ⚡ SHELLY-SMART-METER-CARD %c v1.0.0 `,
+  `%c ⚡ SHELLY-SMART-METER-CARD %c v${VERSION} `,
   'color:#fff;background:#f59e0b;font-weight:700;border-radius:4px 0 0 4px;padding:2px 6px;',
   'color:#fff;background:#6b7280;font-weight:700;border-radius:0 4px 4px 0;padding:2px 6px;'
 );
@@ -24,56 +25,95 @@ interface MeterConfig {
   phase_labels?: Record<string, string>;
 }
 
-const DEFAULT_ENTITIES: Record<string, string> = {
-  // Phase A — Casa
-  phase_a_power: 'sensor.smartmetersolar_phase_a_active_power',
-  phase_a_voltage: 'sensor.smartmetersolar_phase_a_voltage',
-  phase_a_current: 'sensor.smartmetersolar_phase_a_current',
-  phase_a_pf: 'sensor.smartmetersolar_phase_a_power_factor',
-  phase_a_freq: 'sensor.smartmetersolar_phase_a_frequency',
-  phase_a_energy: 'sensor.smartmetersolar_phase_a_total_active_energy',
-  phase_a_returned: 'sensor.smartmetersolar_phase_a_total_active_returned_energy',
-  // Phase B — Pompa Caldura
-  phase_b_power: 'sensor.smartmetersolar_phase_b_active_power',
-  phase_b_voltage: 'sensor.smartmetersolar_phase_b_voltage',
-  phase_b_current: 'sensor.smartmetersolar_phase_b_current',
-  phase_b_pf: 'sensor.smartmetersolar_phase_b_power_factor',
-  phase_b_freq: 'sensor.smartmetersolar_phase_b_frequency',
-  phase_b_energy: 'sensor.smartmetersolar_phase_b_total_active_energy',
-  phase_b_returned: 'sensor.smartmetersolar_phase_b_total_active_returned_energy',
-  // Phase C — Plita
-  phase_c_power: 'sensor.smartmetersolar_phase_c_active_power',
-  phase_c_voltage: 'sensor.smartmetersolar_phase_c_voltage',
-  phase_c_current: 'sensor.smartmetersolar_phase_c_current',
-  phase_c_pf: 'sensor.smartmetersolar_phase_c_power_factor',
-  phase_c_freq: 'sensor.smartmetersolar_phase_c_frequency',
-  phase_c_energy: 'sensor.smartmetersolar_phase_c_total_active_energy',
-  phase_c_returned: 'sensor.smartmetersolar_phase_c_total_active_returned_energy',
-  // Totals
-  total_power: 'sensor.smartmetersolar_total_active_power',
-  total_apparent: 'sensor.smartmetersolar_total_apparent_power',
-  total_current: 'sensor.smartmetersolar_total_current',
-  total_energy: 'sensor.smartmetersolar_total_active_energy',
-  total_returned: 'sensor.smartmetersolar_total_active_returned_energy',
-  // Daily
-  daily_consumed: 'sensor.consum_zilnic_energy_casa',
-  daily_grid: 'sensor.consum_zilnic_grid',
-  daily_return: 'sensor.shelly_daily_return_grid',
-  // Cost
-  total_cost: 'sensor.smartmetersolar_total_active_energy_cost',
-  // Device
-  temperature: 'sensor.smartmetersolar_temperature',
-  rssi: 'sensor.smartmetersolar_rssi',
-  uptime: 'sensor.smartmetersolar_uptime',
-  cloud: 'binary_sensor.smartmetersolar_cloud',
-  firmware: 'update.smartmetersolar_firmware_update',
+// Suffixes used to discover Shelly Pro 3EM entities
+const DISCOVERY_SUFFIXES: Record<string, string> = {
+  phase_a_power: '_phase_a_active_power',
+  phase_a_voltage: '_phase_a_voltage',
+  phase_a_current: '_phase_a_current',
+  phase_a_pf: '_phase_a_power_factor',
+  phase_a_freq: '_phase_a_frequency',
+  phase_a_energy: '_phase_a_total_active_energy',
+  phase_a_returned: '_phase_a_total_active_returned_energy',
+  phase_b_power: '_phase_b_active_power',
+  phase_b_voltage: '_phase_b_voltage',
+  phase_b_current: '_phase_b_current',
+  phase_b_pf: '_phase_b_power_factor',
+  phase_b_freq: '_phase_b_frequency',
+  phase_b_energy: '_phase_b_total_active_energy',
+  phase_b_returned: '_phase_b_total_active_returned_energy',
+  phase_c_power: '_phase_c_active_power',
+  phase_c_voltage: '_phase_c_voltage',
+  phase_c_current: '_phase_c_current',
+  phase_c_pf: '_phase_c_power_factor',
+  phase_c_freq: '_phase_c_frequency',
+  phase_c_energy: '_phase_c_total_active_energy',
+  phase_c_returned: '_phase_c_total_active_returned_energy',
+  total_power: '_total_active_power',
+  total_apparent: '_total_apparent_power',
+  total_current: '_total_current',
+  total_energy: '_total_active_energy',
+  total_returned: '_total_active_returned_energy',
+  temperature: '_temperature',
+  rssi: '_rssi',
+  uptime: '_uptime',
+};
+
+// These use helper/utility_meter entities — user must configure if non-default
+const OPTIONAL_ENTITIES: Record<string, string> = {
+  daily_consumed: '',
+  daily_grid: '',
+  daily_return: '',
+  total_cost: '',
+  cloud: '',
+  firmware: '',
 };
 
 const DEFAULT_PHASE_LABELS: Record<string, string> = {
-  A: 'Casa',
-  B: 'Pompă Căldură',
-  C: 'Plită',
+  A: 'Faza A',
+  B: 'Faza B',
+  C: 'Faza C',
 };
+
+// ── Auto-discovery ─────────────────────────────────────────────────────────
+let _discoveredCache: Record<string, string> | null = null;
+
+function discoverShelly3EM(hass: HomeAssistant): Record<string, string> {
+  if (_discoveredCache) return _discoveredCache;
+
+  const entities = Object.keys(hass.states);
+  // Find any entity matching sensor.*_phase_a_active_power
+  const match = entities.find((e) =>
+    e.startsWith('sensor.') && e.endsWith('_phase_a_active_power')
+  );
+
+  if (!match) return {};
+
+  // Extract device prefix: sensor.{prefix}_phase_a_active_power → {prefix}
+  const prefix = match.replace('sensor.', '').replace('_phase_a_active_power', '');
+
+  const discovered: Record<string, string> = {};
+  for (const [key, suffix] of Object.entries(DISCOVERY_SUFFIXES)) {
+    const entityId = `sensor.${prefix}${suffix}`;
+    if (hass.states[entityId]) {
+      discovered[key] = entityId;
+    }
+  }
+
+  // Try to find cloud binary sensor
+  const cloudEntity = `binary_sensor.${prefix}_cloud`;
+  if (hass.states[cloudEntity]) {
+    discovered.cloud = cloudEntity;
+  }
+
+  // Try to find firmware update
+  const firmwareEntity = `update.${prefix}_firmware_update`;
+  if (hass.states[firmwareEntity]) {
+    discovered.firmware = firmwareEntity;
+  }
+
+  _discoveredCache = discovered;
+  return discovered;
+}
 
 // ── Card ────────────────────────────────────────────────────────────────────
 @customElement(CARD)
@@ -90,7 +130,7 @@ export class ShellySmartMeterCard extends LitElement {
   public static getStubConfig(): MeterConfig {
     return {
       type: CARD,
-      title: '⚡ Smart Meter Solar',
+      title: '⚡ Smart Meter',
       show_header: true,
       show_phases: true,
       show_energy: true,
@@ -98,17 +138,19 @@ export class ShellySmartMeterCard extends LitElement {
       show_device: true,
       show_flow: true,
       cost_per_kwh: 0.85,
-      entities: DEFAULT_ENTITIES,
+      entities: {},
       phase_labels: DEFAULT_PHASE_LABELS,
     };
   }
 
   setConfig(config: MeterConfig): void {
     if (!config) throw new Error('Invalid config');
+    // Reset discovery cache so it re-scans if hass changes
+    _discoveredCache = null;
     this.config = {
       ...config,
       type: CARD,
-      title: config.title || '⚡ Smart Meter Solar',
+      title: config.title || '⚡ Smart Meter',
       show_header: config.show_header ?? true,
       show_phases: config.show_phases ?? true,
       show_energy: config.show_energy ?? true,
@@ -116,27 +158,45 @@ export class ShellySmartMeterCard extends LitElement {
       show_device: config.show_device ?? true,
       show_flow: config.show_flow ?? true,
       cost_per_kwh: config.cost_per_kwh ?? 0.85,
-      entities: { ...DEFAULT_ENTITIES, ...config.entities },
+      entities: config.entities || {},
       phase_labels: { ...DEFAULT_PHASE_LABELS, ...config.phase_labels },
     };
   }
 
-  // ── Helpers ──────────────────────────────────────────────────────────────
+  // ── Resolve entity: user config > auto-discovered > empty ──────────────
+  private _resolve(key: string): string {
+    // 1. User explicitly set it
+    const userVal = this.config.entities?.[key];
+    if (userVal) return userVal;
+
+    // 2. Auto-discovered from Shelly Pro 3EM
+    if (this.hass) {
+      const discovered = discoverShelly3EM(this.hass);
+      if (discovered[key]) return discovered[key];
+    }
+
+    return '';
+  }
+
   private _s(id: string): string | undefined {
-    return this.hass?.states[this.config.entities?.[id] || '']?.state;
+    const entityId = this._resolve(id);
+    return entityId ? this.hass?.states[entityId]?.state : undefined;
   }
   private _n(id: string): number {
     const v = parseFloat(this._s(id) || '');
     return isNaN(v) ? 0 : v;
   }
   private _e(id: string): string {
-    return this.config.entities?.[id] || '';
+    return this._resolve(id);
   }
   private _unit(id: string): string {
-    return this.hass?.states[this.config.entities?.[id] || '']?.attributes?.unit_of_measurement || '';
+    const entityId = this._resolve(id);
+    return entityId ? (this.hass?.states[entityId]?.attributes?.unit_of_measurement || '') : '';
   }
   private _changed(id: string): string {
-    const s = this.hass?.states[this.config.entities?.[id] || ''];
+    const entityId = this._resolve(id);
+    if (!entityId) return '';
+    const s = this.hass?.states[entityId];
     if (!s?.last_changed) return '';
     const mins = Math.floor((Date.now() - new Date(s.last_changed).getTime()) / 60000);
     if (mins < 1) return 'acum';
@@ -145,7 +205,7 @@ export class ShellySmartMeterCard extends LitElement {
     return h < 24 ? `${h}h ${mins % 60}min` : `${Math.floor(h / 24)}z ${h % 24}h`;
   }
   private _handleMore(entityId: string) {
-    fireEvent(this, 'hass-more-info', { entityId });
+    if (entityId) fireEvent(this, 'hass-more-info', { entityId });
   }
   private _fmt(v: number, decimals = 1): string {
     if (Math.abs(v) >= 1000) return (v / 1000).toFixed(decimals) + 'k';
@@ -160,6 +220,33 @@ export class ShellySmartMeterCard extends LitElement {
   protected render(): TemplateResult | typeof nothing {
     if (!this.config || !this.hass) return nothing;
 
+    // Check if we found any Shelly 3EM entities
+    const discovered = this.hass ? discoverShelly3EM(this.hass) : {};
+    const hasDiscovery = Object.keys(discovered).length > 0;
+    const hasUserConfig = Object.keys(this.config.entities || {}).length > 0;
+
+    if (!hasDiscovery && !hasUserConfig) {
+      return html`
+        <ha-card>
+          <div class="header importing">
+            <div class="header-icon">⚡</div>
+            <div class="header-text">
+              <div class="header-title">Shelly Smart Meter</div>
+              <div class="header-sub">Nu s-au găsit entități Shelly Pro 3EM</div>
+            </div>
+          </div>
+          <div class="content">
+            <div class="no-device">
+              <ha-icon icon="mdi:alert-circle-outline"></ha-icon>
+              <p>Nu am detectat automat un Shelly Pro 3EM.</p>
+              <p>Adaugă entitățile manual în config sau verifică că device-ul este integrat în Home Assistant.</p>
+              <code>type: custom:ha-shelly-smart-meter-card<br>entities:<br>&nbsp;&nbsp;phase_a_power: sensor.numele_tau_phase_a_active_power</code>
+            </div>
+          </div>
+        </ha-card>
+      `;
+    }
+
     const totalPower = this._n('total_power');
     const isExporting = totalPower < 0;
     const absPower = Math.abs(Math.round(totalPower));
@@ -167,7 +254,7 @@ export class ShellySmartMeterCard extends LitElement {
     // Phase data
     const phases = (['a', 'b', 'c'] as const).map((p) => ({
       key: p.toUpperCase(),
-      label: this.config.phase_labels?.[p.toUpperCase()] || p.toUpperCase(),
+      label: this.config.phase_labels?.[p.toUpperCase()] || `Faza ${p.toUpperCase()}`,
       power: this._n(`phase_${p}_power`),
       voltage: this._n(`phase_${p}_voltage`),
       current: this._n(`phase_${p}_current`),
@@ -200,7 +287,7 @@ export class ShellySmartMeterCard extends LitElement {
           <div class="header ${isExporting ? 'exporting' : 'importing'}">
             <div class="header-icon">⚡</div>
             <div class="header-text">
-              <div class="header-title">${this.config.title || 'Smart Meter Solar'}</div>
+              <div class="header-title">${this.config.title || 'Smart Meter'}</div>
               <div class="header-sub">
                 ${isExporting
                   ? `↗ Export ${absPower}W în rețea`
@@ -225,7 +312,7 @@ export class ShellySmartMeterCard extends LitElement {
                 <small>Solar</small>
               </div>
 
-              <div class="flow-arrow ${isExporting ? 'to-grid' : 'from-grid'}">
+              <div class="flow-arrow">
                 <div class="arrow-line ${isExporting ? 'export' : (totalPower > 50 ? 'import' : 'idle')}">
                   <ha-icon icon=${isExporting ? 'mdi:arrow-right-bold' : (totalPower > 50 ? 'mdi:arrow-left-bold' : 'mdi:swap-horizontal')}></ha-icon>
                 </div>
@@ -237,7 +324,7 @@ export class ShellySmartMeterCard extends LitElement {
                 <small>Consum</small>
               </div>
 
-              <div class="flow-arrow ${!isExporting && totalPower > 50 ? 'from-grid' : 'to-grid'}">
+              <div class="flow-arrow">
                 <div class="arrow-line ${!isExporting && totalPower > 50 ? 'import' : (isExporting ? 'export' : 'idle')}">
                   <ha-icon icon=${!isExporting && totalPower > 50 ? 'mdi:arrow-left-bold' : 'mdi:arrow-right-bold'}></ha-icon>
                 </div>
@@ -307,23 +394,27 @@ export class ShellySmartMeterCard extends LitElement {
           ` : nothing}
 
           <!-- ENERGY COUNTERS -->
-          ${this.config.show_energy !== false ? html`
+          ${this.config.show_energy !== false && (this._e('daily_consumed') || this._e('daily_return') || totalEnergy) ? html`
             <div class="energy-section">
               <div class="energy-grid">
-                <div class="energy-card consumed" @click=${() => this._handleMore(this._e('daily_consumed'))}>
-                  <ha-icon icon="mdi:counter"></ha-icon>
-                  <div class="energy-info">
-                    <span class="energy-label">Consum azi</span>
-                    <span class="energy-val">${dailyConsumed.toFixed(2)} kWh</span>
+                ${this._e('daily_consumed') ? html`
+                  <div class="energy-card consumed" @click=${() => this._handleMore(this._e('daily_consumed'))}>
+                    <ha-icon icon="mdi:counter"></ha-icon>
+                    <div class="energy-info">
+                      <span class="energy-label">Consum azi</span>
+                      <span class="energy-val">${dailyConsumed.toFixed(2)} kWh</span>
+                    </div>
                   </div>
-                </div>
-                <div class="energy-card returned" @click=${() => this._handleMore(this._e('daily_return'))}>
-                  <ha-icon icon="mdi:solar-power"></ha-icon>
-                  <div class="energy-info">
-                    <span class="energy-label">Returnat azi</span>
-                    <span class="energy-val">${dailyReturn.toFixed(2)} kWh</span>
+                ` : nothing}
+                ${this._e('daily_return') ? html`
+                  <div class="energy-card returned" @click=${() => this._handleMore(this._e('daily_return'))}>
+                    <ha-icon icon="mdi:solar-power"></ha-icon>
+                    <div class="energy-info">
+                      <span class="energy-label">Returnat azi</span>
+                      <span class="energy-val">${dailyReturn.toFixed(2)} kWh</span>
+                    </div>
                   </div>
-                </div>
+                ` : nothing}
                 <div class="energy-card total-in" @click=${() => this._handleMore(this._e('total_energy'))}>
                   <ha-icon icon="mdi:meter-electric"></ha-icon>
                   <div class="energy-info">
@@ -343,7 +434,7 @@ export class ShellySmartMeterCard extends LitElement {
           ` : nothing}
 
           <!-- COSTS -->
-          ${this.config.show_costs !== false ? html`
+          ${this.config.show_costs !== false && this._e('daily_grid') ? html`
             <div class="costs" @click=${() => this._handleMore(this._e('daily_grid'))}>
               <div class="cost-row">
                 <ha-icon icon="mdi:cash"></ha-icon>
@@ -353,26 +444,34 @@ export class ShellySmartMeterCard extends LitElement {
               <div class="cost-row small">
                 <span></span>
                 <span class="cost-note">${dailyGrid.toFixed(2)} kWh × ${costPerKwh} RON/kWh</span>
-                <span class="cost-note">Total: ${this._s('total_cost') ? parseFloat(this._s('total_cost')!).toFixed(2) + ' RON' : '—'}</span>
+                ${this._e('total_cost') ? html`
+                  <span class="cost-note">Total: ${parseFloat(this._s('total_cost') || '0').toFixed(2)} RON</span>
+                ` : nothing}
               </div>
             </div>
           ` : nothing}
 
           <!-- DEVICE INFO -->
-          ${this.config.show_device !== false ? html`
+          ${this.config.show_device !== false && (temp || rssi) ? html`
             <div class="device">
-              <div class="device-item">
-                <ha-icon icon="mdi:thermometer"></ha-icon>
-                <span>${temp || '?'}°C</span>
-              </div>
-              <div class="device-item ${rssi < -75 ? 'weak' : rssi < -60 ? 'ok' : 'good'}">
-                <ha-icon icon="mdi:wifi"></ha-icon>
-                <span>${rssi} dBm</span>
-              </div>
-              <div class="device-item">
-                <ha-icon icon=${isOnline ? 'mdi:cloud-check' : 'mdi:cloud-off-outline'}></ha-icon>
-                <span>${isOnline ? 'Cloud' : 'Local'}</span>
-              </div>
+              ${temp ? html`
+                <div class="device-item">
+                  <ha-icon icon="mdi:thermometer"></ha-icon>
+                  <span>${temp}°C</span>
+                </div>
+              ` : nothing}
+              ${rssi ? html`
+                <div class="device-item ${rssi < -75 ? 'weak' : rssi < -60 ? 'ok' : 'good'}">
+                  <ha-icon icon="mdi:wifi"></ha-icon>
+                  <span>${rssi} dBm</span>
+                </div>
+              ` : nothing}
+              ${this._e('cloud') ? html`
+                <div class="device-item">
+                  <ha-icon icon=${isOnline ? 'mdi:cloud-check' : 'mdi:cloud-off-outline'}></ha-icon>
+                  <span>${isOnline ? 'Cloud' : 'Local'}</span>
+                </div>
+              ` : nothing}
             </div>
           ` : nothing}
         </div>
@@ -415,6 +514,19 @@ export class ShellySmartMeterCard extends LitElement {
       .power-badge.import { background: rgba(239,68,68,0.12); color: #ef4444; }
 
       .content { padding: 14px; }
+
+      /* No device found */
+      .no-device {
+        display: flex; flex-direction: column; align-items: center;
+        gap: 8px; padding: 24px 16px; text-align: center;
+      }
+      .no-device ha-icon { --mdc-icon-size: 40px; color: var(--secondary-text-color); }
+      .no-device p { margin: 0; font-size: 13px; color: var(--secondary-text-color); }
+      .no-device code {
+        display: block; margin-top: 8px; padding: 12px; border-radius: 8px;
+        background: rgba(255,255,255,0.04); font-size: 11px; text-align: left;
+        color: var(--secondary-text-color); white-space: pre-wrap;
+      }
 
       /* Flow Diagram */
       .flow {

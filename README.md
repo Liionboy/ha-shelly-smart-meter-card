@@ -18,6 +18,12 @@
 
 ---
 
+## 🔍 Auto-Discovery
+
+Card-ul **detectează automat** orice Shelly Pro 3EM integrat în Home Assistant — indiferent de numele device-ului! Nu trebuie să configurezi nimic dacă ai un singur Shelly Pro 3EM.
+
+Ai mai multe? Specifică entity-urile manual în config.
+
 ## ✨ Features
 
 | Feature | Description |
@@ -51,10 +57,11 @@
 
 ## ⚙️ Configuration
 
-### Minimal (uses all defaults)
+### Minimal (auto-discovery)
 ```yaml
 type: custom:ha-shelly-smart-meter-card
 ```
+Fără nicio setare — găsește automat Shelly Pro 3EM!
 
 ### Full
 ```yaml
@@ -96,24 +103,30 @@ entities:
   firmware: update.smartmetersolar_firmware_update
 ```
 
-## 🏷️ Default Entity Map
+## 🏷️ Entity Resolution
 
-All entities default to Shelly SmartMeterSolar device names. Override only if yours differ.
+Card-ul rezolvă entitățile în ordine:
+1. **Config manual** — dacă specifici `entities.xxx` în YAML
+2. **Auto-discovery** — caută automat `sensor.*_phase_a_active_power` în HA
+3. **Gol** — secțiunea nu se afișează
 
-| Section | Key | Default Entity |
-|---------|-----|---------------|
-| **Phase A** | `phase_a_power` | `sensor.smartmetersolar_phase_a_active_power` |
-| | `phase_a_voltage` | `sensor.smartmetersolar_phase_a_voltage` |
-| | `phase_a_current` | `sensor.smartmetersolar_phase_a_current` |
-| **Phase B** | `phase_b_power` | `sensor.smartmetersolar_phase_b_active_power` |
-| | `phase_b_voltage` | `sensor.smartmetersolar_phase_b_voltage` |
-| **Phase C** | `phase_c_power` | `sensor.smartmetersolar_phase_c_active_power` |
-| | `phase_c_voltage` | `sensor.smartmetersolar_phase_c_voltage` |
-| **Totals** | `total_power` | `sensor.smartmetersolar_total_active_power` |
-| **Daily** | `daily_consumed` | `sensor.consum_zilnic_energy_casa` |
-| | `daily_return` | `sensor.shelly_daily_return_grid` |
-| **Device** | `temperature` | `sensor.smartmetersolar_temperature` |
-| | `rssi` | `sensor.smartmetersolar_rssi` |
+### Entități auto-discoverable
+| Key | Pattern |
+|-----|--------|
+| `phase_a_power` | `sensor.{device}_phase_a_active_power` |
+| `phase_a_voltage` | `sensor.{device}_phase_a_voltage` |
+| `phase_a_current` | `sensor.{device}_phase_a_current` |
+| `total_power` | `sensor.{device}_total_active_power` |
+| `temperature` | `sensor.{device}_temperature` |
+| `rssi` | `sensor.{device}_rssi` |
+
+### Entități opționale (necesită config manual)
+| Key | Descriere |
+|-----|----------|
+| `daily_consumed` | Helper utility_meter consum zilnic |
+| `daily_grid` | Helper utility_meter consum grid |
+| `daily_return` | Helper utility_meter return grid |
+| `total_cost` | Sensor cost total |
 
 ## 📸 Screenshots
 
