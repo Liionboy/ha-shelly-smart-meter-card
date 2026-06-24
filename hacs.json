@@ -1,0 +1,9 @@
+{
+  "name": "⚡ Shelly Smart Meter Card",
+  "render_readme": true,
+  "homeassistant": "2024.1.0",
+  "content_in_root": false,
+  "filename": "ha-shelly-smart-meter-card.js",
+  "country": [],
+  "zip_release": false
+}
