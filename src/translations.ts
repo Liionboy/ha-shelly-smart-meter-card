@@ -138,6 +138,12 @@ const translations: Record<Lang, Record<string, string>> = {
     'ctrl.off': 'Oprit',
 
     'footer.update': 'Update:',
+    
+    // Forecast
+    'forecast.title': 'Prognoză Lunară',
+    'forecast.projected': 'Estimat sfârșit lună',
+    'forecast.projected_cost': 'Cost estimat',
+    'forecast.daily_avg': 'Medie zilnică',
 
     'no_device.title': 'Shelly Smart Meter',
     'no_device.msg': 'Nu s-au găsit entități Shelly Pro 3EM.',

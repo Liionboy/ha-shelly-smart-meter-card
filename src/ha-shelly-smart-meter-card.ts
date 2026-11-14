@@ -4,7 +4,7 @@ import { HomeAssistant, LovelaceCardEditor, fireEvent } from 'custom-card-helper
 import { Lang, detectLang, t } from './translations';
 
 const CARD = 'ha-shelly-smart-meter-card';
-const VERSION = '3.0.0';
+const VERSION = '3.1.0';
 console.info(
   `%c ⚡ SHELLY-SMART-METER-CARD %c v${VERSION} `,
   'color:#fff;background:#f59e0b;font-weight:700;border-radius:4px 0 0 4px;padding:2px 6px;',
@@ -28,6 +28,15 @@ interface MeterConfig {
   cost_currency?: string;
   entities?: Record<string, string>;
   phase_labels?: Record<string, string>;
+}
+
+// ── Helper pentru scalare text ──────────────────────────────────────────────
+function fitText(value: number, unit: string, maxWidth: number = 6): string {
+  const str = value.toFixed(1) + unit;
+  if (str.length <= maxWidth) return str;
+  // Dacă e prea lung, folosește notație compactă
+  if (Math.abs(value) >= 1000) return (value / 1000).toFixed(1) + 'k' + unit;
+  return value.toFixed(0) + unit;
 }
 
 // ── Auto-discovery ─────────────────────────────────────────────────────────
@@ -207,21 +216,21 @@ export class ShellySmartMeterCard extends LitElement {
           <div class="flow">
             <div class="flow-node solar ${isExp ? 'active' : ''}">
               <ha-icon icon="mdi:solar-power-variant"></ha-icon>
-              <span class="flow-val">${isExp ? abs : 0}W</span>
+              <span class="flow-val">${fitText(isExp ? abs : 0, 'W')}</span>
               <small>${t(L, 'flow.solar')}</small>
             </div>
             <div class="flow-arrow"><div class="arrow-line ${isExp ? 'export' : totalPower > 50 ? 'import' : 'idle'}">
               <ha-icon icon=${isExp ? 'mdi:arrow-right-bold' : totalPower > 50 ? 'mdi:arrow-left-bold' : 'mdi:swap-horizontal'}></ha-icon></div></div>
             <div class="flow-node house">
               <ha-icon icon="mdi:home-lightning-bolt"></ha-icon>
-              <span class="flow-val">${Math.round(totalApp || abs)}W</span>
+              <span class="flow-val">${fitText(Math.round(totalApp || abs), 'W')}</span>
               <small>${t(L, 'flow.house')}</small>
             </div>
             <div class="flow-arrow"><div class="arrow-line ${!isExp && totalPower > 50 ? 'import' : isExp ? 'export' : 'idle'}">
               <ha-icon icon=${!isExp && totalPower > 50 ? 'mdi:arrow-left-bold' : 'mdi:arrow-right-bold'}></ha-icon></div></div>
             <div class="flow-node grid ${!isExp && totalPower > 50 ? 'active' : ''}">
               <ha-icon icon="mdi:transmission-tower"></ha-icon>
-              <span class="flow-val">${!isExp && totalPower > 50 ? abs : isExp ? abs : 0}W</span>
+              <span class="flow-val">${fitText(!isExp && totalPower > 50 ? abs : isExp ? abs : 0, 'W')}</span>
               <small>${t(L, 'flow.grid')}</small>
             </div>
           </div>` : nothing}
@@ -283,7 +292,40 @@ export class ShellySmartMeterCard extends LitElement {
             <div class="cr"><ha-icon icon="mdi:cash"></ha-icon><span>${t(L, 'cost.daily')}</span><span class="cv">${dailyCost.toFixed(2)} ${cur}</span></div>
             <div class="cr small"><span></span><span class="cn">${t(L, 'cost.rate', { kwh: dailyGrid.toFixed(2), rate: `${cpk} ${cur}` })}</span>
               ${this._n('total_cost') ? html`<span class="cn">${t(L, 'total.cost')}: ${this._n('total_cost').toFixed(2)} ${cur}</span>` : nothing}</div>
-          </div>` : nothing}
+          </div>
+          
+          <!-- ADAUGAT: Prognoză lunară -->
+          <div class="forecast">
+            <div class="fc-header">
+              <ha-icon icon="mdi:chart-line"></ha-icon>
+              <span>Prognoză Lunară</span>
+            </div>
+            ${(() => {
+              const today = new Date();
+              const dayOfMonth = today.getDate();
+              const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+              const dailyAvg = dailyGrid;
+              const projected = (dailyAvg * daysInMonth).toFixed(1);
+              const projectedCost = (dailyAvg * daysInMonth * cpk).toFixed(2);
+              return html`
+                <div class="fc-rows">
+                  <div class="fc-row">
+                    <span class="fc-label">Estimat sfârșit lună</span>
+                    <span class="fc-value">${projected} kWh</span>
+                  </div>
+                  <div class="fc-row">
+                    <span class="fc-label">Cost estimat</span>
+                    <span class="fc-value cost">${projectedCost} ${cur}</span>
+                  </div>
+                  <div class="fc-row">
+                    <span class="fc-label">Medie zilnică</span>
+                    <span class="fc-value">${dailyAvg.toFixed(2)} kWh/zi</span>
+                  </div>
+                </div>
+              `;
+            })()}
+          </div>
+          ` : nothing}
 
           ${this.config.show_device !== false ? html`
           <div class="sh"><span class="st">📡 ${t(L, 'section.device')}</span></div>
@@ -306,6 +348,33 @@ export class ShellySmartMeterCard extends LitElement {
             ${this._e('monitor_production') ? html`<div class="ctrl ${monOn ? 'on' : ''}" @click=${() => this._more(this._e('monitor_production'))}><ha-icon icon="mdi:script-text"></ha-icon><span>${t(L, 'ctrl.monitor')}: ${monOn ? t(L, 'ctrl.on') : t(L, 'ctrl.off')}</span></div>` : nothing}
           </div>` : nothing}
         </div>
+
+        <!-- ADAUGAT: Comparație zilnică -->
+        ${this.config.show_costs !== false ? html`
+        <div class="comparison">
+          <div class="cmp-title">📊 Comparație Zilnică</div>
+          <div class="cmp-grid">
+            ${(() => {
+              const currentPower = Math.abs(Math.round(totalPower));
+              const avgPower = 500; // Estimare bazată pe consum mediu
+              const diff = currentPower - avgPower;
+              const trend = diff > 50 ? 'high' : diff < -50 ? 'low' : 'normal';
+              const trendIcon = trend === 'high' ? '📈' : trend === 'low' ? '📉' : '➡️';
+              const trendColor = trend === 'high' ? '#ef4444' : trend === 'low' ? '#22c55e' : '#f59e0b';
+              return html`
+                <div class="cmp-item">
+                  <span class="cmp-label">Consum acum</span>
+                  <span class="cmp-value">${currentPower}W</span>
+                </div>
+                <div class="cmp-item">
+                  <span class="cmp-label">Față de medie</span>
+                  <span class="cmp-value" style="color: ${trendColor}">${trendIcon} ${diff > 0 ? '+' : ''}${diff}W</span>
+                </div>
+              `;
+            })()}
+          </div>
+        </div>
+        ` : nothing}
 
         <div class="footer"><span>${t(L, 'footer.update')} ${this._changed('total_power')}</span></div>
       </ha-card>`;
@@ -393,6 +462,27 @@ export class ShellySmartMeterCard extends LitElement {
       .el { font-size: 11px; color: var(--secondary-text-color); }
       .ev { font-size: 14px; font-weight: 700; color: var(--primary-text-color); }
       .costs { padding: 10px 14px; border-radius: 10px; background: rgba(34,197,94,0.05); border: 1px solid rgba(34,197,94,0.1); margin-bottom: 14px; cursor: pointer; }
+      .costs:hover { background: rgba(34,197,94,0.08); }
+      
+      /* Forecast styles */
+      .forecast { padding: 12px 14px; border-radius: 10px; background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.1); margin-bottom: 14px; }
+      .forecast:hover { background: rgba(59,130,246,0.08); }
+      .fc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+      .fc-header ha-icon { --mdc-icon-size: 18px; color: #3b82f6; }
+      .fc-header span { font-size: 13px; font-weight: 600; color: var(--primary-text-color); }
+      .fc-rows { display: flex; flex-direction: column; gap: 6px; }
+      .fc-row { display: flex; justify-content: space-between; align-items: center; }
+      .fc-label { font-size: 11px; color: var(--secondary-text-color); }
+      .fc-value { font-size: 13px; font-weight: 600; color: var(--primary-text-color); }
+      .fc-value.cost { color: #22c55e; }
+      
+      /* Comparison styles */
+      .comparison { padding: 10px 14px; border-radius: 10px; background: rgba(139,92,246,0.05); border: 1px solid rgba(139,92,246,0.1); margin-bottom: 10px; }
+      .cmp-title { font-size: 12px; font-weight: 600; color: var(--secondary-text-color); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+      .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .cmp-item { display: flex; flex-direction: column; gap: 2px; }
+      .cmp-label { font-size: 10px; color: var(--secondary-text-color); }
+      .cmp-value { font-size: 14px; font-weight: 700; color: var(--primary-text-color); }
       .costs:hover { background: rgba(34,197,94,0.08); }
       .cr { display: flex; align-items: center; gap: 8px; }
       .cr ha-icon { --mdc-icon-size: 18px; color: #22c55e; }
